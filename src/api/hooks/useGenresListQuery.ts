@@ -1,5 +1,5 @@
-import { fetchWithAuth } from "@/utilities/fetchWithAuth";
-import { useQuery } from "@tanstack/react-query";
+import { fetchWithAuth } from '@/utilities/fetchWithAuth';
+import { useQuery } from '@tanstack/react-query';
 
 type Genre = {
   id: number;
@@ -7,14 +7,14 @@ type Genre = {
 };
 
 const getGenresList = async (): Promise<Genre[]> => {
-  const response = await fetchWithAuth("/_api/genre/movie/list");
+  const response = await fetchWithAuth('/_api/genre/movie/list');
 
   return response.genres;
 };
 
 export const useGenresListQuery = () => {
   return useQuery({
-    queryKey: ["genres", "list"],
+    queryKey: ['genres', 'list'],
     queryFn: getGenresList,
   });
 };

@@ -1,7 +1,7 @@
-import { Movie, useGenresListQuery } from "@/api";
-import { getImageSrcByPath } from "@/utilities/getImageSrcByPath";
-import { Box, Text } from "@chakra-ui/react";
-import Image from "next/image";
+import { Movie, useGenresListQuery } from '@/api';
+import { getImageSrcByPath } from '@/utilities/getImageSrcByPath';
+import { Box, Text } from '@chakra-ui/react';
+import Image from 'next/image';
 
 type Props = {
   movie: Movie;
@@ -19,8 +19,8 @@ const MovieCard = ({ movie }: Props) => {
 
           return genre ? genre.name : null;
         })
-        .join(", ")
-    : "";
+        .join(', ')
+    : '';
 
   return (
     <Box>

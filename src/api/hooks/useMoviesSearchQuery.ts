@@ -1,6 +1,6 @@
-import { fetchWithAuth } from "@/utilities/fetchWithAuth";
-import { Movie } from "../types";
-import { useInfiniteQuery } from "@tanstack/react-query";
+import { fetchWithAuth } from '@/utilities/fetchWithAuth';
+import { Movie } from '../types';
+import { useInfiniteQuery } from '@tanstack/react-query';
 
 const searchForMovies = async ({
   pageParam,
@@ -12,9 +12,7 @@ const searchForMovies = async ({
   data: Movie[];
   nextCursor?: number;
 }> => {
-  const response = await fetchWithAuth(
-    `/_api/search/movie?page=${pageParam}&query=${queryKey[1]}`,
-  );
+  const response = await fetchWithAuth(`/_api/search/movie?page=${pageParam}&query=${queryKey[1]}`);
 
   return {
     data: response.results,
@@ -24,7 +22,7 @@ const searchForMovies = async ({
 
 export const useMoviesSearchQuery = (searchTerm: string) => {
   return useInfiniteQuery({
-    queryKey: ["moviesSearch", searchTerm],
+    queryKey: ['moviesSearch', searchTerm],
     queryFn: searchForMovies,
     initialPageParam: 1,
     getNextPageParam: (lastPage) => lastPage.nextCursor,

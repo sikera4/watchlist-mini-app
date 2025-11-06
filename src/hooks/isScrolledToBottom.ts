@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState } from 'react';
 
 type UseIsScrolledToBottomOptions = {
   offset?: number; // How close to the bottom before counting as "scrolled to bottom"
@@ -13,7 +13,7 @@ type UseIsScrolledToBottomOptions = {
  */
 export function useIsScrolledToBottom(
   ref?: React.RefObject<HTMLElement>,
-  options: UseIsScrolledToBottomOptions = {},
+  options: UseIsScrolledToBottomOptions = {}
 ): boolean {
   const { offset = 0 } = options;
   const [isAtBottom, setIsAtBottom] = useState(false);
@@ -37,11 +37,11 @@ export function useIsScrolledToBottom(
     };
 
     const scrollElement = ref?.current ?? window;
-    scrollElement.addEventListener("scroll", handleScroll);
+    scrollElement.addEventListener('scroll', handleScroll);
     handleScroll(); // initialize state
 
     return () => {
-      scrollElement.removeEventListener("scroll", handleScroll);
+      scrollElement.removeEventListener('scroll', handleScroll);
     };
   }, [ref, offset]);
 
