@@ -28,8 +28,8 @@ const MovieCard = ({ movie }: Props) => {
         <Image
           src={getImageSrcByPath(posterPath)}
           alt={`${title} poster`}
-          width={180}
-          height={270}
+          width={200}
+          height={300}
         />
       </Box>
       <Text textStyle="lg" fontWeight="bold" mt={2}>
