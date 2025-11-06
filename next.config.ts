@@ -7,6 +7,27 @@ const nextConfig: NextConfig = {
   experimental: {
     optimizePackageImports: ["@chakra-ui/react"],
   },
+
+  rewrites: async () => {
+    return [
+      {
+        source: "/_api/:path*",
+        destination: "https://api.themoviedb.org/3/",
+      },
+    ];
+  },
+
+  images: {
+    remotePatterns: [
+      {
+        protocol: "https",
+        hostname: "image.tmdb.org",
+        port: "",
+        pathname: "/t/p/**",
+        search: "",
+      },
+    ],
+  },
 };
 
 export default nextConfig;
