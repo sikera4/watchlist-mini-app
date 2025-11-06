@@ -12,7 +12,7 @@ const nextConfig: NextConfig = {
     return [
       {
         source: "/_api/:path*",
-        destination: "https://api.themoviedb.org/3/",
+        destination: "https://api.themoviedb.org/3/:path*",
       },
     ];
   },
