@@ -33,7 +33,7 @@ const ListPage = () => {
     }
   }, [isScrolledToBottom]);
 
-  const isFetching = moviesListQuery.isFetching || moviesSearchQuery.isFetching;
+  const isLoading = moviesListQuery.isLoading || moviesSearchQuery.isLoading;
 
   return (
     <Container p={4} position="relative" minHeight="100vh">
@@ -49,7 +49,7 @@ const ListPage = () => {
           </Button>
         </Grid>
       </form>
-      {isFetching ? (
+      {isLoading ? (
         <AbsoluteCenter>
           <Spinner size="xl" />
         </AbsoluteCenter>
