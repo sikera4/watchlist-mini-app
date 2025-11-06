@@ -1,6 +1,6 @@
-import { fetchWithAuth } from "@/utilities/fetchWithAuth";
-import { useInfiniteQuery } from "@tanstack/react-query";
-import { Movie } from "../types";
+import { fetchWithAuth } from '@/utilities/fetchWithAuth';
+import { useInfiniteQuery } from '@tanstack/react-query';
+import { Movie } from '../types';
 
 const getMoviesList = async ({
   pageParam,
@@ -20,7 +20,7 @@ const getMoviesList = async ({
 
 export const useMoviesListQuery = () => {
   return useInfiniteQuery({
-    queryKey: ["movies", "popular"],
+    queryKey: ['movies', 'popular'],
     queryFn: getMoviesList,
     initialPageParam: 1,
     getNextPageParam: (lastPage) => lastPage.nextCursor,
