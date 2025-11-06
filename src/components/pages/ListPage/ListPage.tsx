@@ -28,8 +28,16 @@ const ListPage = () => {
   };
 
   useEffect(() => {
-    if (isScrolledToBottom && moviesListQuery.hasNextPage) {
+    if (!isScrolledToBottom) {
+      return;
+    }
+
+    if (!searchTerm && moviesListQuery.hasNextPage) {
       moviesListQuery.fetchNextPage();
+    }
+
+    if (searchTerm && moviesSearchQuery.hasNextPage) {
+      moviesSearchQuery.fetchNextPage();
     }
   }, [isScrolledToBottom]);
 
