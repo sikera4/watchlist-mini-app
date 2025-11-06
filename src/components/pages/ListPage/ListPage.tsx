@@ -2,12 +2,12 @@
 
 import { useMoviesListQuery, useMoviesSearchQuery } from '@/api';
 import { useIsScrolledToBottom } from '@/hooks/isScrolledToBottom';
-import { AbsoluteCenter, Button, Container, Flex, Grid, Input, Spinner } from '@chakra-ui/react';
-import React, { useEffect, useState } from 'react';
-import MovieCard from './blocks/MovieCard';
-import { useForm } from 'react-hook-form';
-import { SearchFormValues } from './types';
+import { AbsoluteCenter, Button, Container, Grid, Input, Spinner } from '@chakra-ui/react';
 import { useTranslations } from 'next-intl';
+import React, { useEffect, useState } from 'react';
+import { useForm } from 'react-hook-form';
+import MovieCard from './blocks/MovieCard';
+import { SearchFormValues } from './types';
 
 const ListPage = () => {
   const [searchTerm, setSearchTerm] = useState('');
