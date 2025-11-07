@@ -2,7 +2,7 @@
 
 import { useMoviesListQuery, useMoviesSearchQuery } from '@/api';
 import { useIsScrolledToBottom } from '@/hooks/isScrolledToBottom';
-import { AbsoluteCenter, Button, Container, Grid, Input, Spinner } from '@chakra-ui/react';
+import { AbsoluteCenter, Box, Button, Container, Grid, Input, Spinner } from '@chakra-ui/react';
 import { useTranslations } from 'next-intl';
 import React, { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
@@ -45,24 +45,12 @@ const ListPage = () => {
 
   return (
     <Container p={4} position="relative" minHeight="100vh">
-      <form onSubmit={handleSubmit(onSubmit)}>
-        <Grid templateColumns="3fr 1fr" gap={4}>
-          <Input
-            placeholder={t('searchPlaceholder')}
-            autoComplete="off"
-            {...register('searchInput')}
-          />
-          <Button variant="surface" type="submit">
-            {t('searchButtonCaption')}
-          </Button>
-        </Grid>
-      </form>
       {isLoading ? (
         <AbsoluteCenter>
           <Spinner size="xl" />
         </AbsoluteCenter>
       ) : (
-        <Grid mt={4} templateColumns="1fr 1fr" gap={4}>
+        <Grid templateColumns="1fr 1fr" gap={4}>
           {(searchTerm ? moviesSearchQuery.data : moviesListQuery.data)?.pages.map((page, i) => (
             <React.Fragment key={i}>
               {page.data.map((movie) => (
@@ -72,6 +60,20 @@ const ListPage = () => {
           ))}
         </Grid>
       )}
+      <Box position="fixed" left={0} bottom={0} width="100%" py={4} px={4} background="bg">
+        <form onSubmit={handleSubmit(onSubmit)}>
+          <Grid templateColumns="3fr 1fr" gap={4}>
+            <Input
+              placeholder={t('searchPlaceholder')}
+              autoComplete="off"
+              {...register('searchInput')}
+            />
+            <Button variant="surface" type="submit">
+              {t('searchButtonCaption')}
+            </Button>
+          </Grid>
+        </form>
+      </Box>
     </Container>
   );
 };
