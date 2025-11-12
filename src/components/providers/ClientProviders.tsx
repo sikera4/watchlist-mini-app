@@ -3,12 +3,16 @@
 import { ReactNode, useState } from 'react';
 import { Provider } from '../ui/provider';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
+import { useTelegramApp } from '@/hooks/useTelegramApp';
+import { useColorMode } from '../ui/color-mode';
 
 type Props = {
   children: ReactNode;
 };
 
 const ClientProviders = ({ children }: Props) => {
+  const { setColorMode } = useColorMode();
+
   const [queryClient] = useState(
     () =>
       new QueryClient({
@@ -21,6 +25,13 @@ const ClientProviders = ({ children }: Props) => {
         },
       })
   );
+
+  const { tgWebApp } = useTelegramApp();
+
+  if (tgWebApp?.colorScheme) {
+    alert(`tg color mode: ${tgWebApp?.colorScheme}`);
+    setColorMode(tgWebApp.colorScheme);
+  }
 
   return (
     <QueryClientProvider client={queryClient}>
