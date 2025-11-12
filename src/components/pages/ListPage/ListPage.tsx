@@ -6,7 +6,7 @@ import { AbsoluteCenter, Box, Button, Container, Grid, Input, Spinner } from '@c
 import { useTranslations } from 'next-intl';
 import React, { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
-import MovieCard from './blocks/MovieCard';
+import MovieCard from './MovieCard';
 import { SearchFormValues } from './types';
 
 const ListPage = () => {
@@ -45,22 +45,7 @@ const ListPage = () => {
 
   return (
     <Container p={4} position="relative" minHeight="100vh">
-      {isLoading ? (
-        <AbsoluteCenter>
-          <Spinner size="xl" />
-        </AbsoluteCenter>
-      ) : (
-        <Grid templateColumns="1fr 1fr" gap={4}>
-          {(searchTerm ? moviesSearchQuery.data : moviesListQuery.data)?.pages.map((page, i) => (
-            <React.Fragment key={i}>
-              {page.data.map((movie) => (
-                <MovieCard key={movie.id} movie={movie} />
-              ))}
-            </React.Fragment>
-          ))}
-        </Grid>
-      )}
-      <Box position="fixed" left={0} bottom={0} width="100%" py={4} px={4} background="bg">
+      <Box background="bg">
         <form onSubmit={handleSubmit(onSubmit)}>
           <Grid templateColumns="3fr 1fr" gap={4}>
             <Input
@@ -74,6 +59,21 @@ const ListPage = () => {
           </Grid>
         </form>
       </Box>
+      {isLoading ? (
+        <AbsoluteCenter>
+          <Spinner size="xl" />
+        </AbsoluteCenter>
+      ) : (
+        <Grid templateColumns="1fr 1fr" gap={4} mt={4}>
+          {(searchTerm ? moviesSearchQuery.data : moviesListQuery.data)?.pages.map((page, i) => (
+            <React.Fragment key={i}>
+              {page.data.map((movie) => (
+                <MovieCard key={movie.id} movie={movie} />
+              ))}
+            </React.Fragment>
+          ))}
+        </Grid>
+      )}
     </Container>
   );
 };

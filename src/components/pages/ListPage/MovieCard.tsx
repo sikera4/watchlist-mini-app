@@ -1,8 +1,8 @@
 import { Movie, useGenresListQuery } from '@/api';
 import { getImageSrcByPath } from '@/utilities/getImageSrcByPath';
 import { Box, Button, Flex, Text } from '@chakra-ui/react';
-import Image from 'next/image';
 import { useState } from 'react';
+import ImageWithFallback from './ImageWithFallback';
 
 type Props = {
   movie: Movie;
@@ -27,12 +27,14 @@ const MovieCard = ({ movie }: Props) => {
 
   return (
     <Box position="relative" onClick={() => setIsTapped(!isTapped)}>
-      <Box rounded="md" overflow="hidden" position="relative" h="270px">
-        <Image
+      <Box rounded="md" overflow="hidden" position="relative" h="270px" bg="bg.emphasized">
+        <ImageWithFallback
           src={getImageSrcByPath(posterPath)}
           alt={`${title} poster`}
           fill={true}
-          objectFit="cover"
+          style={{
+            objectFit: 'cover',
+          }}
         />
       </Box>
       <Text textStyle="lg" fontWeight="bold" mt={2}>
