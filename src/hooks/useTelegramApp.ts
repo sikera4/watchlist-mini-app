@@ -4,7 +4,7 @@ import { WebApp } from "telegram-web-app";
 export const useTelegramApp = (): {
   tgWebApp: WebApp | null;
 } => {
-  const tgWebApp: WebApp | null = window?.Telegram?.WebApp ?? null;
+  const tgWebApp: WebApp | null = typeof window !== 'undefined' ? window.Telegram?.WebApp ?? null : null;
 
   useEffect(() => {
     if (!tgWebApp) {
