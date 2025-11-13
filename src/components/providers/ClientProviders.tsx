@@ -29,7 +29,6 @@ const ClientProviders = ({ children }: Props) => {
   const { tgWebApp } = useTelegramApp();
 
   if (tgWebApp?.colorScheme) {
-    alert(`tg color mode: ${tgWebApp?.colorScheme}`);
     setColorMode(tgWebApp.colorScheme);
   }
 
