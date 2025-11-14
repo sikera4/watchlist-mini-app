@@ -39,7 +39,6 @@ const CreateCollectionForm = () => {
 
   return isFormMode ? (
     <form onSubmit={rhfHandleSubmit(handleSubmit)}>
-      {tgWebApp?.initDataUnsafe?.user?.id}
       <Flex direction="column" gap={2}>
         <Input placeholder="List name" {...register('name')} />
         <Grid gridTemplateColumns="1fr 1fr" gap={2}>

@@ -1,12 +1,11 @@
-import type { Metadata } from 'next';
-import { Geist, Geist_Mono } from 'next/font/google';
-import './globals.css';
 import Providers from '@/components/providers';
-import { NextIntlClientProvider } from 'next-intl';
-import Script from 'next/script';
 import Navigation from '@/components/ui/Navigation';
-import Head from 'next/head';
 import { Toaster } from '@/components/ui/toaster';
+import type { Metadata } from 'next';
+import { NextIntlClientProvider } from 'next-intl';
+import { Geist, Geist_Mono } from 'next/font/google';
+import Script from 'next/script';
+import './globals.css';
 
 const geistSans = Geist({
   variable: '--font-geist-sans',
