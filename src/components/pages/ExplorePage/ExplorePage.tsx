@@ -2,15 +2,27 @@
 
 import { useMoviesListQuery, useMoviesSearchQuery } from '@/api';
 import { useIsScrolledToBottom } from '@/hooks/isScrolledToBottom';
-import { AbsoluteCenter, Box, Button, Container, Grid, Input, Spinner } from '@chakra-ui/react';
+import {
+  AbsoluteCenter,
+  Box,
+  Button,
+  Code,
+  Container,
+  Grid,
+  Input,
+  Spinner,
+} from '@chakra-ui/react';
 import { useTranslations } from 'next-intl';
 import React, { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import MovieCard from './MovieCard';
 import { SearchFormValues } from './types';
+import { useTelegramApp } from '@/components/providers/TelegramAppProvider';
 
 const ExplorePage = () => {
   const [searchTerm, setSearchTerm] = useState('');
+
+  const tgWebApp = useTelegramApp();
 
   const moviesListQuery = useMoviesListQuery();
   const moviesSearchQuery = useMoviesSearchQuery(searchTerm);
@@ -45,6 +57,7 @@ const ExplorePage = () => {
 
   return (
     <Container p={4} position="relative" minHeight="100vh">
+      <Code>{JSON.stringify(tgWebApp)}</Code>
       <Box background="bg">
         <form onSubmit={rhfHandleSubmit(handleSubmit)}>
           <Grid templateColumns="3fr 1fr" gap={4}>

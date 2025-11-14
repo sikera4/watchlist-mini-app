@@ -1,3 +1,5 @@
+'use client';
+
 import { useAddUserMutation } from '@/api';
 import { checkIfUserExists } from '@/utilities/checkIfUserExists';
 import { createContext, ReactNode, useContext, useEffect } from 'react';
