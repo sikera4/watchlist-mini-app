@@ -1,6 +1,6 @@
 'use client';
 
-import { useCreateListMutation } from '@/api/hooks/useCreateListMutation';
+import { useCreateListMutation } from '@/api';
 import { Button, Flex, Grid, Input } from '@chakra-ui/react';
 import { useState } from 'react';
 import { useForm } from 'react-hook-form';
@@ -29,7 +29,7 @@ const CreateCollectionForm = () => {
   });
 
   const handleSubmit = (data: CreateListFormValues) => {
-    const userId = tgWebApp?.initDataUnsafe?.user?.id;
+    const userId = tgWebApp?.initDataUnsafe?.user?.id ?? 1;
 
     if (userId) {
       createListMutation.mutate({ name: data.name, userId });

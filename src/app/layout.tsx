@@ -6,6 +6,7 @@ import { NextIntlClientProvider } from 'next-intl';
 import Script from 'next/script';
 import Navigation from '@/components/ui/Navigation';
 import Head from 'next/head';
+import { Toaster } from '@/components/ui/toaster';
 
 const geistSans = Geist({
   variable: '--font-geist-sans',
@@ -35,6 +36,7 @@ export default async function RootLayout({
           <Providers>
             {children}
             <Navigation />
+            <Toaster />
           </Providers>
         </NextIntlClientProvider>
       </body>

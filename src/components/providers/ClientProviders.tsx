@@ -5,6 +5,7 @@ import { Provider } from '../ui/provider';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { useTelegramApp } from '@/hooks/useTelegramApp';
 import { useColorMode } from '../ui/color-mode';
+import AddUserToFirebase from './AddUserToFirebase';
 
 type Props = {
   children: ReactNode;
@@ -35,6 +36,7 @@ const ClientProviders = ({ children }: Props) => {
   return (
     <QueryClientProvider client={queryClient}>
       <Provider>{children}</Provider>
+      <AddUserToFirebase />
     </QueryClientProvider>
   );
 };
