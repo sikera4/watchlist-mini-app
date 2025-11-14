@@ -68,7 +68,9 @@ const ListPage = () => {
           {(searchTerm ? moviesSearchQuery.data : moviesListQuery.data)?.pages.map((page, i) => (
             <React.Fragment key={i}>
               {page.data.map((movie) => (
-                <MovieCard key={movie.id} movie={movie} />
+                <Box key={movie.id}>
+                  <MovieCard movie={movie} />
+                </Box>
               ))}
             </React.Fragment>
           ))}

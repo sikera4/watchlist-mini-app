@@ -4,6 +4,8 @@ import './globals.css';
 import Providers from '@/components/providers';
 import { NextIntlClientProvider } from 'next-intl';
 import Script from 'next/script';
+import Navigation from '@/components/ui/Navigation';
+import Head from 'next/head';
 
 const geistSans = Geist({
   variable: '--font-geist-sans',
@@ -27,12 +29,13 @@ export default async function RootLayout({
 }>) {
   return (
     <html lang="en" suppressHydrationWarning>
-      <head>
-        <Script src="https://telegram.org/js/telegram-web-app.js?59" />
-      </head>
+      <Script src="https://telegram.org/js/telegram-web-app.js?59" />
       <body className={`${geistSans.variable} ${geistMono.variable} antialiased`}>
         <NextIntlClientProvider>
-          <Providers>{children}</Providers>
+          <Providers>
+            {children}
+            <Navigation />
+          </Providers>
         </NextIntlClientProvider>
       </body>
     </html>
