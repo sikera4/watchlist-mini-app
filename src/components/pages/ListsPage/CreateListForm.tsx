@@ -42,7 +42,9 @@ const CreateCollectionForm = () => {
       <Flex direction="column" gap={2}>
         <Input placeholder="List name" {...register('name')} />
         <Grid gridTemplateColumns="1fr 1fr" gap={2}>
-          <Button type="submit">Добавить</Button>
+          <Button type="submit" loading={createListMutation.isLoading}>
+            Добавить
+          </Button>
           <Button onClick={() => setIsFormMode(false)}>Отмена</Button>
         </Grid>
       </Flex>
