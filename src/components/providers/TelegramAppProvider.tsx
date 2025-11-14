@@ -2,7 +2,7 @@
 
 import { useAddUserMutation } from '@/api';
 import { checkIfUserExists } from '@/utilities/checkIfUserExists';
-import { createContext, ReactNode, useContext, useEffect } from 'react';
+import { createContext, ReactNode, useContext, useEffect, useState } from 'react';
 import { WebApp } from 'telegram-web-app';
 
 const TelegramAppContext = createContext<WebApp | null>(null);
@@ -16,12 +16,14 @@ type Params = {
 };
 
 const TelegramAppProvider = ({ children }: Params) => {
-  const tgWebApp: WebApp | null =
-    typeof window !== 'undefined' ? (window.Telegram?.WebApp ?? null) : null;
+  const [tgWebApp, setTgWebApp] = useState<WebApp | null>(null);
 
   const addUserMutation = useAddUserMutation();
 
   useEffect(() => {
+    const tgWebApp: WebApp | null =
+      typeof window !== 'undefined' ? (window.Telegram?.WebApp ?? null) : null;
+
     if (!tgWebApp) {
       console.log('Telegram Web App is not available');
       return;
@@ -29,6 +31,8 @@ const TelegramAppProvider = ({ children }: Params) => {
 
     tgWebApp.ready();
     tgWebApp.expand();
+
+    setTgWebApp(tgWebApp);
 
     const addUserToFireBase = async () => {
       const userId = tgWebApp?.initDataUnsafe?.user?.id;
@@ -47,7 +51,7 @@ const TelegramAppProvider = ({ children }: Params) => {
     };
 
     addUserToFireBase();
-  }, [tgWebApp]);
+  }, []);
 
   return <TelegramAppContext.Provider value={tgWebApp}>{children}</TelegramAppContext.Provider>;
 };
