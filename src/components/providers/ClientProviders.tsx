@@ -1,11 +1,10 @@
 'use client';
 
-import { ReactNode, useState } from 'react';
-import { Provider } from '../ui/provider';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
-import { useTelegramApp } from '@/hooks/useTelegramApp';
+import { ReactNode, useState } from 'react';
 import { useColorMode } from '../ui/color-mode';
-import AddUserToFirebase from './AddUserToFirebase';
+import { Provider } from '../ui/provider';
+import TelegramAppProvider, { useTelegramApp } from './TelegramAppProvider';
 
 type Props = {
   children: ReactNode;
@@ -27,7 +26,7 @@ const ClientProviders = ({ children }: Props) => {
       })
   );
 
-  const { tgWebApp } = useTelegramApp();
+  const tgWebApp = useTelegramApp();
 
   if (tgWebApp?.colorScheme) {
     setColorMode(tgWebApp.colorScheme);
@@ -35,8 +34,9 @@ const ClientProviders = ({ children }: Props) => {
 
   return (
     <QueryClientProvider client={queryClient}>
-      <Provider>{children}</Provider>
-      <AddUserToFirebase />
+      <TelegramAppProvider>
+        <Provider>{children}</Provider>
+      </TelegramAppProvider>
     </QueryClientProvider>
   );
 };
