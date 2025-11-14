@@ -9,9 +9,9 @@ export type Movie = {
 export type List = {
   id: number;
   name?: string;
-  users: string[];
+  usersIds: number[];
   movies: {
     id: number;
     isSeen: boolean;
-  }
+  }[];
 }

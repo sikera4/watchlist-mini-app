@@ -1,1 +1,1 @@
-export { default } from '@/components/pages/CollectionsPage';
+export { default } from '@/components/pages/ListsPage';

@@ -9,13 +9,13 @@ import { useForm } from 'react-hook-form';
 import MovieCard from './MovieCard';
 import { SearchFormValues } from './types';
 
-const ListPage = () => {
+const ExplorePage = () => {
   const [searchTerm, setSearchTerm] = useState('');
 
   const moviesListQuery = useMoviesListQuery();
   const moviesSearchQuery = useMoviesSearchQuery(searchTerm);
 
-  const { register, handleSubmit } = useForm<SearchFormValues>();
+  const { register, handleSubmit: rhfHandleSubmit } = useForm<SearchFormValues>();
 
   const isScrolledToBottom = useIsScrolledToBottom(undefined, {
     offset: 200,
@@ -23,7 +23,7 @@ const ListPage = () => {
 
   const t = useTranslations('ListPage');
 
-  const onSubmit = (data: SearchFormValues) => {
+  const handleSubmit = (data: SearchFormValues) => {
     setSearchTerm(data.searchInput);
   };
 
@@ -46,7 +46,7 @@ const ListPage = () => {
   return (
     <Container p={4} position="relative" minHeight="100vh">
       <Box background="bg">
-        <form onSubmit={handleSubmit(onSubmit)}>
+        <form onSubmit={rhfHandleSubmit(handleSubmit)}>
           <Grid templateColumns="3fr 1fr" gap={4}>
             <Input
               placeholder={t('searchPlaceholder')}
@@ -80,4 +80,4 @@ const ListPage = () => {
   );
 };
 
-export default ListPage;
+export default ExplorePage;
