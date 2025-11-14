@@ -30,7 +30,9 @@ export default async function RootLayout({
 }>) {
   return (
     <html lang="en" suppressHydrationWarning>
-      <Script src="https://telegram.org/js/telegram-web-app.js?59" />
+      <head>
+        <Script src="https://telegram.org/js/telegram-web-app.js?59" />
+      </head>
       <body className={`${geistSans.variable} ${geistMono.variable} antialiased`}>
         <NextIntlClientProvider>
           <Providers>
