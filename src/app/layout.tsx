@@ -1,6 +1,5 @@
 import Providers from '@/components/providers';
 import Navigation from '@/components/ui/Navigation';
-import { Toaster } from '@/components/ui/toaster';
 import type { Metadata } from 'next';
 import { NextIntlClientProvider } from 'next-intl';
 import { Geist, Geist_Mono } from 'next/font/google';
@@ -37,7 +36,6 @@ export default async function RootLayout({
           <Providers>
             {children}
             <Navigation />
-            <Toaster />
           </Providers>
         </NextIntlClientProvider>
       </body>

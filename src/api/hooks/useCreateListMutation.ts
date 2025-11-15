@@ -1,5 +1,5 @@
 import { db } from '@/utilities/initializeFirebase';
-import { useMutation, UseMutationOptions } from '@tanstack/react-query';
+import { useMutation, UseMutationOptions, useQueryClient } from '@tanstack/react-query';
 import { addDoc, arrayUnion, collection, doc, updateDoc } from 'firebase/firestore';
 
 type Params = {
@@ -25,8 +25,15 @@ const createList = async (params: Params) => {
 };
 
 export const useCreateListMutation = (options?: UseMutationOptions<unknown, unknown, Params>) => {
+  const queryClient = useQueryClient();
+
   return useMutation({
     ...options,
     mutationFn: createList,
+    onSuccess: (...params) => {
+      queryClient.invalidateQueries({ queryKey: ['user', 'lists'] });
+
+      options?.onSuccess?.(...params);
+    }
   });
 };

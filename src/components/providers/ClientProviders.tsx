@@ -2,16 +2,15 @@
 
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { ReactNode, useState } from 'react';
-import { useColorMode } from '../ui/color-mode';
-import { Provider } from '../ui/provider';
 import TelegramAppProvider, { useTelegramApp } from './TelegramAppProvider';
+import { HeroUIProvider, ToastProvider } from '@heroui/react';
 
 type Props = {
   children: ReactNode;
 };
 
 const ClientProviders = ({ children }: Props) => {
-  const { setColorMode } = useColorMode();
+  const [colorMode, setColorMode] = useState<'light' | 'dark'>('dark');
 
   const [queryClient] = useState(
     () =>
@@ -35,7 +34,10 @@ const ClientProviders = ({ children }: Props) => {
   return (
     <QueryClientProvider client={queryClient}>
       <TelegramAppProvider>
-        <Provider>{children}</Provider>
+        <HeroUIProvider>
+          <main className={`${colorMode} bg-background text-foreground`}>{children}</main>
+          <ToastProvider />
+        </HeroUIProvider>
       </TelegramAppProvider>
     </QueryClientProvider>
   );

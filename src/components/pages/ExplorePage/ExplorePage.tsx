@@ -2,12 +2,12 @@
 
 import { useMoviesListQuery, useMoviesSearchQuery } from '@/api';
 import { useIsScrolledToBottom } from '@/hooks/isScrolledToBottom';
-import { AbsoluteCenter, Box, Button, Container, Grid, Input, Spinner } from '@chakra-ui/react';
 import { useTranslations } from 'next-intl';
 import React, { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import MovieCard from './MovieCard';
 import { SearchFormValues } from './types';
+import { Button, Input, Spinner } from '@heroui/react';
 
 const ExplorePage = () => {
   const [searchTerm, setSearchTerm] = useState('');
@@ -44,39 +44,42 @@ const ExplorePage = () => {
   const isLoading = moviesListQuery.isLoading || moviesSearchQuery.isLoading;
 
   return (
-    <Container p={4} position="relative" minHeight="100vh">
-      <Box background="bg">
+    <div className="p-4 relative min-h-screen">
+      <div className="bg-background">
         <form onSubmit={rhfHandleSubmit(handleSubmit)}>
-          <Grid templateColumns="3fr 1fr" gap={4}>
+          <div className="grid grid-cols-6 gap-4">
             <Input
-              placeholder={t('searchPlaceholder')}
+              size="sm"
+              className="col-span-4"
+              label={t('searchPlaceholder')}
               autoComplete="off"
+              radius="lg"
               {...register('searchInput')}
             />
-            <Button variant="surface" type="submit">
+            <Button className="col-span-2" variant="solid" type="submit" size="lg">
               {t('searchButtonCaption')}
             </Button>
-          </Grid>
+          </div>
         </form>
-      </Box>
+      </div>
       {isLoading ? (
-        <AbsoluteCenter>
-          <Spinner size="xl" />
-        </AbsoluteCenter>
+        <div className="absolute ">
+          <Spinner size="lg" />
+        </div>
       ) : (
-        <Grid templateColumns="1fr 1fr" gap={4} mt={4}>
+        <div className="grid grid-cols-2 gap-4 mt-4">
           {(searchTerm ? moviesSearchQuery.data : moviesListQuery.data)?.pages.map((page, i) => (
             <React.Fragment key={i}>
               {page.data.map((movie) => (
-                <Box key={movie.id}>
+                <div key={movie.id}>
                   <MovieCard movie={movie} />
-                </Box>
+                </div>
               ))}
             </React.Fragment>
           ))}
-        </Grid>
+        </div>
       )}
-    </Container>
+    </div>
   );
 };
 

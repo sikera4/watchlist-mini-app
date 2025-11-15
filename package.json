@@ -11,10 +11,10 @@
     "lint:prettier": "prettier --write 'src/**/*.{js,jsx,ts,tsx,scss}'"
   },
   "dependencies": {
-    "@chakra-ui/react": "3.28.0",
-    "@emotion/react": "11.14.0",
+    "@heroui/react": "2.8.5",
     "@tanstack/react-query": "5.90.7",
     "firebase": "12.6.0",
+    "framer-motion": "12.23.24",
     "next": "16.0.1",
     "next-intl": "4.4.0",
     "next-themes": "0.4.6",
