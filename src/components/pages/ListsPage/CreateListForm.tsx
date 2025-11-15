@@ -1,12 +1,11 @@
 'use client';
 
 import { useCreateListMutation } from '@/api';
-import { Button, Flex, Grid, Input } from '@chakra-ui/react';
 import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { CreateListFormValues } from './types';
-import { toaster } from '@/components/ui/toaster';
 import { useTelegramApp } from '@/components/providers/TelegramAppProvider';
+import { addToast, Button, Input } from '@heroui/react';
 
 const CreateCollectionForm = () => {
   const { register, handleSubmit: rhfHandleSubmit } = useForm<CreateListFormValues>();
@@ -18,13 +17,15 @@ const CreateCollectionForm = () => {
     onSuccess: () => {
       setIsFormMode(false);
 
-      toaster.success({
+      addToast({
         title: 'Список успешно создан',
+        color: 'success',
       });
     },
     onError: () => {
-      toaster.error({
+      addToast({
         title: 'Ошибка при создании списка',
+        color: 'danger',
       });
     },
   });
@@ -39,18 +40,18 @@ const CreateCollectionForm = () => {
 
   return isFormMode ? (
     <form onSubmit={rhfHandleSubmit(handleSubmit)}>
-      <Flex direction="column" gap={2}>
-        <Input placeholder="List name" {...register('name')} />
-        <Grid gridTemplateColumns="1fr 1fr" gap={2}>
-          <Button type="submit" loading={createListMutation.isLoading}>
+      <div className="flex flex-col gap-2">
+        <Input label="List name" {...register('name')} />
+        <div className="grid grid-cols-2 gap-2">
+          <Button type="submit" isLoading={createListMutation.isPending}>
             Добавить
           </Button>
-          <Button onClick={() => setIsFormMode(false)}>Отмена</Button>
-        </Grid>
-      </Flex>
+          <Button onPress={() => setIsFormMode(false)}>Отмена</Button>
+        </div>
+      </div>
     </form>
   ) : (
-    <Button onClick={() => setIsFormMode(true)}>Добавить список</Button>
+    <Button onPress={() => setIsFormMode(true)}>Добавить список</Button>
   );
 };
 

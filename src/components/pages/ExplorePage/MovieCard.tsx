@@ -1,9 +1,9 @@
 import { Movie, useGenresListQuery } from '@/api';
 import { getImageSrcByPath } from '@/utilities/getImageSrcByPath';
-import { Box, Button, Flex, Text } from '@chakra-ui/react';
 import { useState } from 'react';
 import ImageWithFallback from './ImageWithFallback';
 import { formatYear } from '@/utilities/formatYear';
+import { Button } from '@heroui/react';
 
 type Props = {
   movie: Movie;
@@ -27,8 +27,8 @@ const MovieCard = ({ movie }: Props) => {
     : '';
 
   return (
-    <Box position="relative" onClick={() => setIsTapped(!isTapped)}>
-      <Box rounded="md" overflow="hidden" position="relative" h="270px" bg="bg.emphasized">
+    <div className="relative" onClick={() => setIsTapped(!isTapped)}>
+      <div className="rounded-md overflow-hidden relative bg-content1-foreground h-[270px]">
         <ImageWithFallback
           src={getImageSrcByPath(posterPath)}
           alt={`${title} poster`}
@@ -37,28 +37,17 @@ const MovieCard = ({ movie }: Props) => {
             objectFit: 'cover',
           }}
         />
-      </Box>
-      <Text textStyle="lg" fontWeight="bold" mt={2}>
-        {title}
-      </Text>
-      <Text textStyle="sm" fontWeight="light">
+      </div>
+      <h4 className="text-lg font-bold mt-2">{title}</h4>
+      <span className="text-sm font-light">
         {formatYear(new Date(releaseDate))}, {genresString}
-      </Text>
-      <Flex
-        opacity={isTapped ? 1 : 0}
-        position="absolute"
-        top={0}
-        left={0}
-        right={0}
-        bottom={0}
-        bg="blackAlpha.600"
-        justifyContent="center"
-        alignItems="center"
-        transition="opacity 0.2s"
+      </span>
+      <div
+        className={`flex opacity-${isTapped ? 1 : 0} absolute top-0 left-0 right-0 bottom-0 bg-background/60 justify-center items-center transition-opacity duration-200`}
       >
-        <Button variant="surface">Select</Button>
-      </Flex>
-    </Box>
+        <Button variant="solid">Select</Button>
+      </div>
+    </div>
   );
 };
 
