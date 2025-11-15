@@ -29,6 +29,7 @@ const ClientProviders = ({ children }: Props) => {
 
   useEffect(() => {
     if (tgWebApp?.colorScheme) {
+      console.log(tgWebApp.colorScheme);
       setColorMode(tgWebApp.colorScheme);
     }
   }, [tgWebApp?.colorScheme]);
