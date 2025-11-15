@@ -3,13 +3,14 @@ import { getImageSrcByPath } from '@/utilities/getImageSrcByPath';
 import { Box, Button, Flex, Text } from '@chakra-ui/react';
 import { useState } from 'react';
 import ImageWithFallback from './ImageWithFallback';
+import { formatYear } from '@/utilities/formatYear';
 
 type Props = {
   movie: Movie;
 };
 
 const MovieCard = ({ movie }: Props) => {
-  const { title, poster_path: posterPath, genre_ids: genreIds } = movie;
+  const { title, poster_path: posterPath, genre_ids: genreIds, release_date: releaseDate } = movie;
 
   const [isTapped, setIsTapped] = useState(false);
 
@@ -41,7 +42,7 @@ const MovieCard = ({ movie }: Props) => {
         {title}
       </Text>
       <Text textStyle="sm" fontWeight="light">
-        {genresString}
+        {formatYear(new Date(releaseDate))}, {genresString}
       </Text>
       <Flex
         opacity={isTapped ? 1 : 0}

@@ -14,4 +14,9 @@ export type List = {
     id: number;
     isSeen: boolean;
   }[];
-}
+};
+
+export type User = {
+  userId: number;
+  watchlists: string[];
+};

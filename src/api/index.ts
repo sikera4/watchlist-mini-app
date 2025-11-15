@@ -3,4 +3,6 @@ export { useGenresListQuery } from './hooks/useGenresListQuery';
 export { useMoviesSearchQuery } from './hooks/useMoviesSearchQuery';
 export { useAddUserMutation } from './hooks/useAddUserMutation';
 export { useCreateListMutation } from './hooks/useCreateListMutation';
+export { useUserDataQuery } from './hooks/useUserDataQuery';
+export { useWatchlistsQuery } from './hooks/useWatchlistsQuery';
 export type { Movie } from './types';

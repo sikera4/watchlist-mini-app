@@ -1,4 +1,4 @@
-import { doc, Firestore, getDoc } from "firebase/firestore";
+import { doc, Firestore, getDoc } from 'firebase/firestore';
 
 export const checkIfDocumentExists = async (
   db: Firestore,
@@ -9,4 +9,4 @@ export const checkIfDocumentExists = async (
   const docSnap = await getDoc(docRef);
 
   return docSnap.exists();
-}
+};
