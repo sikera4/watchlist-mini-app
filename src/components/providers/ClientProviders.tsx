@@ -1,7 +1,7 @@
 'use client';
 
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
-import { ReactNode, useState } from 'react';
+import { ReactNode, useEffect, useState } from 'react';
 import TelegramAppProvider, { useTelegramApp } from './TelegramAppProvider';
 import { HeroUIProvider, ToastProvider } from '@heroui/react';
 
@@ -27,9 +27,11 @@ const ClientProviders = ({ children }: Props) => {
 
   const tgWebApp = useTelegramApp();
 
-  if (tgWebApp?.colorScheme) {
-    setColorMode(tgWebApp.colorScheme);
-  }
+  useEffect(() => {
+    if (tgWebApp?.colorScheme) {
+      setColorMode(tgWebApp.colorScheme);
+    }
+  }, [tgWebApp?.colorScheme]);
 
   return (
     <QueryClientProvider client={queryClient}>
