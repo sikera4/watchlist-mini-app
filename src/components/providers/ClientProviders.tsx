@@ -28,11 +28,9 @@ const ClientProviders = ({ children }: Props) => {
   const tgWebApp = useTelegramApp();
 
   useEffect(() => {
-    if (tgWebApp?.colorScheme) {
-      console.log(tgWebApp.colorScheme);
-      setColorMode(tgWebApp.colorScheme);
-    }
-  }, [tgWebApp?.colorScheme]);
+    console.log(tgWebApp);
+    setColorMode(tgWebApp?.colorScheme ?? 'dark');
+  }, [tgWebApp]);
 
   return (
     <QueryClientProvider client={queryClient}>
