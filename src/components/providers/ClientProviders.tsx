@@ -1,17 +1,16 @@
 'use client';
 
-import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
-import { ReactNode, useEffect, useState } from 'react';
-import TelegramAppProvider, { useTelegramApp } from './TelegramAppProvider';
 import { HeroUIProvider, ToastProvider } from '@heroui/react';
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
+import { ReactNode, useState } from 'react';
+import TelegramAppProvider from './TelegramAppProvider';
+import ThemeProvider from './ThemeProvider';
 
 type Props = {
   children: ReactNode;
 };
 
 const ClientProviders = ({ children }: Props) => {
-  const [colorMode, setColorMode] = useState<'light' | 'dark'>('dark');
-
   const [queryClient] = useState(
     () =>
       new QueryClient({
@@ -25,18 +24,11 @@ const ClientProviders = ({ children }: Props) => {
       })
   );
 
-  const tgWebApp = useTelegramApp();
-
-  useEffect(() => {
-    console.log(tgWebApp);
-    setColorMode(tgWebApp?.colorScheme ?? 'dark');
-  }, [tgWebApp]);
-
   return (
     <QueryClientProvider client={queryClient}>
       <TelegramAppProvider>
         <HeroUIProvider>
-          <main className={`${colorMode} bg-background text-foreground`}>{children}</main>
+          <ThemeProvider>{children}</ThemeProvider>
           <ToastProvider />
         </HeroUIProvider>
       </TelegramAppProvider>
