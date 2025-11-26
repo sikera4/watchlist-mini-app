@@ -7,6 +7,7 @@ export type Movie = {
 };
 
 export type List = {
+  id: string;
   name?: string;
   usersIds: number[];
   movies: {

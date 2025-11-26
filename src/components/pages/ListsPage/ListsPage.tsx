@@ -1,24 +1,12 @@
 'use client';
 
-import CreateListForm from './CreateListForm';
-import { useUserDataQuery, useWatchlistsQuery } from '@/api';
-import { useTelegramApp } from '@/components/providers/TelegramAppProvider';
+import { useWatchlists } from '@/hooks/useWatchlists';
 import { Accordion, AccordionItem, Spinner } from '@heroui/react';
+import CreateListForm from './CreateListForm';
 
 const CollectionsPage = () => {
-  const tgWebApp = useTelegramApp();
-
-  const userId = tgWebApp?.initDataUnsafe?.user?.id ?? 1;
-
-  const userDataQuery = useUserDataQuery(userId, {
-    enabled: Boolean(userId),
-  });
-
-  const watchlistsQuery = useWatchlistsQuery(userDataQuery.data?.watchlists ?? [], {
-    enabled: Boolean(userDataQuery.data?.watchlists?.length),
-  });
-
-  const isLoading = userDataQuery.isLoading || watchlistsQuery.isLoading;
+  const { watchlists, isLoading } = useWatchlists();
+  console.log(watchlists);
 
   return (
     <div className="p-4 min-h-screen">
@@ -29,9 +17,9 @@ const CollectionsPage = () => {
         </div>
       ) : (
         <div className="flex flex-col">
-          {watchlistsQuery.data?.length ? (
+          {watchlists.length ? (
             <Accordion>
-              {watchlistsQuery.data.map((watchlist, i) => (
+              {watchlists.map((watchlist, i) => (
                 <AccordionItem key={i} title={watchlist.name}>
                   <ul className="list-disc list-inside">
                     {watchlist.movies.map((movie, j) => (

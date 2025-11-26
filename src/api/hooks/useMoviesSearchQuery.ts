@@ -12,7 +12,7 @@ const searchForMovies = async ({
   data: Movie[];
   nextCursor?: number;
 }> => {
-  const response = await fetchWithAuth(`/_api/search/movie?page=${pageParam}&query=${queryKey[1]}`);
+  const response = await fetchWithAuth(`/_api/search/multi?page=${pageParam}&query=${queryKey[1]}`);
 
   return {
     data: response.results,

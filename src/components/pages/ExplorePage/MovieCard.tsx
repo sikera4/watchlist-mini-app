@@ -1,16 +1,22 @@
 import { Movie, useGenresListQuery } from '@/api';
+import { formatYear } from '@/utilities/formatYear';
 import { getImageSrcByPath } from '@/utilities/getImageSrcByPath';
 import { useState } from 'react';
+import CardOverlay from './CardOverlay';
 import ImageWithFallback from './ImageWithFallback';
-import { formatYear } from '@/utilities/formatYear';
-import { Button } from '@heroui/react';
 
 type Props = {
   movie: Movie;
 };
 
 const MovieCard = ({ movie }: Props) => {
-  const { title, poster_path: posterPath, genre_ids: genreIds, release_date: releaseDate } = movie;
+  const {
+    title,
+    poster_path: posterPath,
+    genre_ids: genreIds,
+    release_date: releaseDate,
+    id,
+  } = movie;
 
   const [isTapped, setIsTapped] = useState(false);
 
@@ -42,11 +48,7 @@ const MovieCard = ({ movie }: Props) => {
       <span className="text-sm font-light">
         {formatYear(new Date(releaseDate))}, {genresString}
       </span>
-      <div
-        className={`flex opacity-${isTapped ? 1 : 0} absolute top-0 left-0 right-0 bottom-0 bg-background/60 justify-center items-center transition-opacity duration-200`}
-      >
-        <Button variant="solid">Select</Button>
-      </div>
+      <CardOverlay isVisible={isTapped} movieId={id} />
     </div>
   );
 };

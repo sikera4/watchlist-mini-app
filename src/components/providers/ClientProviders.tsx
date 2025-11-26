@@ -29,7 +29,7 @@ const ClientProviders = ({ children }: Props) => {
       <TelegramAppProvider>
         <HeroUIProvider>
           <ThemeProvider>{children}</ThemeProvider>
-          <ToastProvider />
+          <ToastProvider placement="top-center" />
         </HeroUIProvider>
       </TelegramAppProvider>
     </QueryClientProvider>
