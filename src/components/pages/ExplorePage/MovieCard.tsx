@@ -3,7 +3,7 @@ import { formatYear } from '@/utilities/formatYear';
 import { getImageSrcByPath } from '@/utilities/getImageSrcByPath';
 import { useState } from 'react';
 import CardOverlay from './CardOverlay';
-import ImageWithFallback from './ImageWithFallback';
+import ImageWithFallback from '@/components/ui/ImageWithFallback';
 
 type Props = {
   movie: Movie;
@@ -48,7 +48,7 @@ const MovieCard = ({ movie }: Props) => {
       <span className="text-sm font-light">
         {formatYear(new Date(releaseDate))}, {genresString}
       </span>
-      <CardOverlay isVisible={isTapped} movieId={id} />
+      <CardOverlay isVisible={isTapped} movie={movie} />
     </div>
   );
 };

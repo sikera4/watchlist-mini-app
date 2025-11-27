@@ -7,7 +7,11 @@ import { CreateListFormValues } from './types';
 import { useTelegramApp } from '@/components/providers/TelegramAppProvider';
 import { addToast, Button, Input } from '@heroui/react';
 
-const CreateCollectionForm = () => {
+type Props = {
+  className?: string;
+};
+
+const CreateCollectionForm = ({ className }: Props) => {
   const { register, handleSubmit: rhfHandleSubmit } = useForm<CreateListFormValues>();
 
   const [isFormMode, setIsFormMode] = useState(false);
@@ -38,20 +42,26 @@ const CreateCollectionForm = () => {
     }
   };
 
-  return isFormMode ? (
-    <form onSubmit={rhfHandleSubmit(handleSubmit)}>
-      <div className="flex flex-col gap-2">
-        <Input label="List name" {...register('name')} />
-        <div className="grid grid-cols-2 gap-2">
-          <Button type="submit" isLoading={createListMutation.isPending}>
-            Добавить
-          </Button>
-          <Button onPress={() => setIsFormMode(false)}>Отмена</Button>
-        </div>
-      </div>
-    </form>
-  ) : (
-    <Button onPress={() => setIsFormMode(true)}>Добавить список</Button>
+  return (
+    <div className={className}>
+      {isFormMode ? (
+        <form onSubmit={rhfHandleSubmit(handleSubmit)}>
+          <div className="flex flex-col gap-2">
+            <Input label="List name" {...register('name')} />
+            <div className="grid grid-cols-2 gap-2">
+              <Button type="submit" isLoading={createListMutation.isPending}>
+                Добавить
+              </Button>
+              <Button onPress={() => setIsFormMode(false)}>Отмена</Button>
+            </div>
+          </div>
+        </form>
+      ) : (
+        <Button onPress={() => setIsFormMode(true)} className="block w-full">
+          Добавить список
+        </Button>
+      )}
+    </div>
   );
 };
 

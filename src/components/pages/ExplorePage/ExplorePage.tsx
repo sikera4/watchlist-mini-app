@@ -63,7 +63,7 @@ const ExplorePage = () => {
         </form>
       </div>
       {isLoading ? (
-        <div className="absolute top-[calc(50% - 20px)] left-[calc(50% - 20px)]">
+        <div className="absolute top-[calc(50%-20px)] left-[calc(50%-20px)]">
           <Spinner size="lg" />
         </div>
       ) : (

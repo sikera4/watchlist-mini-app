@@ -1,4 +1,5 @@
-import { useAddMovieToWatchlistMutation } from '@/api';
+import { Movie, useAddMovieToWatchlistMutation } from '@/api';
+import { List } from '@/api/types';
 import { useWatchlists } from '@/hooks/useWatchlists';
 import {
   addToast,
@@ -12,10 +13,10 @@ import {
 } from '@heroui/react';
 
 type Props = {
-  movieId: number;
+  movie: Movie;
 };
 
-const AddMovieModal = ({ movieId }: Props) => {
+const AddMovieModal = ({ movie }: Props) => {
   const { isOpen, onOpenChange } = useDisclosure();
 
   const { watchlists, isLoading } = useWatchlists();
@@ -35,6 +36,19 @@ const AddMovieModal = ({ movieId }: Props) => {
     },
   });
 
+  const handleAddMovieClick = (watchlist: List) => {
+    addMovieToWatchlistMutation.mutate({
+      watchlistId: watchlist.id,
+      movie: {
+        id: movie.id,
+        title: movie.title,
+        poster_path: movie.poster_path,
+        release_date: movie.release_date,
+        isSeen: false,
+      },
+    });
+  };
+
   const hasWatchlists = !isLoading && watchlists.length > 0;
 
   return (
@@ -51,12 +65,7 @@ const AddMovieModal = ({ movieId }: Props) => {
                     <div key={watchlist.id} className="flex justify-between items-center gap-2">
                       <span>{watchlist.name}</span>
                       <Button
-                        onPress={() =>
-                          addMovieToWatchlistMutation.mutate({
-                            watchlistId: watchlist.id,
-                            movieId,
-                          })
-                        }
+                        onPress={() => handleAddMovieClick(watchlist)}
                         isLoading={
                           addMovieToWatchlistMutation.isPending &&
                           addMovieToWatchlistMutation.variables.watchlistId === watchlist.id

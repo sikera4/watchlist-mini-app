@@ -6,14 +6,15 @@ export type Movie = {
   id: number;
 };
 
+export type MovieInList = Omit<Movie, 'genre_ids'> & {
+  isSeen: boolean;
+}
+
 export type List = {
   id: string;
   name?: string;
   usersIds: number[];
-  movies: {
-    id: number;
-    isSeen: boolean;
-  }[];
+  movies: MovieInList[];
 };
 
 export type User = {

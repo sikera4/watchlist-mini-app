@@ -2,20 +2,18 @@ import { db } from "@/utilities/initializeFirebase";
 import { useMutation, UseMutationOptions, useQueryClient } from "@tanstack/react-query";
 import { arrayUnion, doc, updateDoc } from "firebase/firestore";
 import { WATCHLISTS_QUERY_KEY } from "./useWatchlistsQuery";
+import { MovieInList } from "../types";
 
 type Params = {
-  movieId: number;
+  movie: MovieInList;
   watchlistId: string;
 }
 
-const addMovieToWatchlistMutation = async ({ movieId, watchlistId }: Params) => {
+const addMovieToWatchlistMutation = async ({ movie, watchlistId }: Params) => {
   const watchlistDocRef = doc(db, 'watchlists', String(watchlistId));
 
   await updateDoc(watchlistDocRef, {
-    movies: arrayUnion({
-      id: movieId,
-      isSeen: false,
-    }),
+    movies: arrayUnion(movie),
   })
 }
 
