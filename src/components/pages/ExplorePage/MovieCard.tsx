@@ -10,7 +10,13 @@ type Props = {
 };
 
 const MovieCard = ({ movie }: Props) => {
-  const { title, poster_path: posterPath, genre_ids: genreIds, release_date: releaseDate } = movie;
+  const {
+    title,
+    name,
+    poster_path: posterPath,
+    genre_ids: genreIds,
+    release_date: releaseDate,
+  } = movie;
 
   const [isTapped, setIsTapped] = useState(false);
 
@@ -40,9 +46,10 @@ const MovieCard = ({ movie }: Props) => {
           }}
         />
       </div>
-      <h4 className="text-lg font-bold mt-2">{title}</h4>
+      <h4 className="text-lg font-bold mt-2">{title ?? name}</h4>
       <span className="text-sm font-light">
-        {Boolean(formattedReleaseDate) && `${formattedReleaseDate}, `}
+        {Boolean(formattedReleaseDate) && formattedReleaseDate}
+        {Boolean(formattedReleaseDate && genresString) && ', '}
         {genresString}
       </span>
       <CardOverlay isVisible={isTapped} movie={movie} />

@@ -11,7 +11,7 @@ const getMoviesList = async ({
   data: Movie[];
   nextCursor?: number;
 }> => {
-  const response = await fetchWithAuth(`/_api/movie/popular?language=${TMDB_LANGUAGE}page=${pageParam}`);
+  const response = await fetchWithAuth(`/_api/movie/popular?language=${TMDB_LANGUAGE}&page=${pageParam}`);
 
   return {
     data: response.results,
