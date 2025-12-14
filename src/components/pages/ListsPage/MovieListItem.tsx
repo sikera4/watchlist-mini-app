@@ -48,7 +48,7 @@ const MovieListItem = ({ movie, watchlistId }: Props) => {
       </div>
       <div>
         <h4 className="text-lg font-bold">{title}</h4>
-        <span className="text-sm mt-1">{formatYear(new Date(releaseDate))}</span>
+        {!!releaseDate && <span className="text-sm mt-1">{formatYear(new Date(releaseDate))}</span>}
       </div>
       <div className="absolute right-0">
         {isSeen ? (

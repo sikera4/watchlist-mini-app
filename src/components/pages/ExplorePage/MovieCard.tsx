@@ -10,13 +10,7 @@ type Props = {
 };
 
 const MovieCard = ({ movie }: Props) => {
-  const {
-    title,
-    poster_path: posterPath,
-    genre_ids: genreIds,
-    release_date: releaseDate,
-    id,
-  } = movie;
+  const { title, poster_path: posterPath, genre_ids: genreIds, release_date: releaseDate } = movie;
 
   const [isTapped, setIsTapped] = useState(false);
 
@@ -32,6 +26,8 @@ const MovieCard = ({ movie }: Props) => {
         .join(', ')
     : '';
 
+  const formattedReleaseDate = releaseDate && formatYear(new Date(releaseDate));
+
   return (
     <div className="relative" onClick={() => setIsTapped(!isTapped)}>
       <div className="rounded-md overflow-hidden relative bg-content1-foreground h-[270px]">
@@ -46,7 +42,8 @@ const MovieCard = ({ movie }: Props) => {
       </div>
       <h4 className="text-lg font-bold mt-2">{title}</h4>
       <span className="text-sm font-light">
-        {formatYear(new Date(releaseDate))}, {genresString}
+        {Boolean(formattedReleaseDate) && `${formattedReleaseDate}, `}
+        {genresString}
       </span>
       <CardOverlay isVisible={isTapped} movie={movie} />
     </div>
