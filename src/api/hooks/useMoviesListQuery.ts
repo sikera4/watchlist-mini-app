@@ -1,6 +1,7 @@
 import { fetchWithAuth } from '@/utilities/fetchWithAuth';
 import { useInfiniteQuery } from '@tanstack/react-query';
 import { Movie } from '../types';
+import { TMDB_LANGUAGE } from '../constants';
 
 const getMoviesList = async ({
   pageParam,
@@ -10,7 +11,7 @@ const getMoviesList = async ({
   data: Movie[];
   nextCursor?: number;
 }> => {
-  const response = await fetchWithAuth(`/_api/movie/popular?page=${pageParam}`);
+  const response = await fetchWithAuth(`/_api/movie/popular?language=${TMDB_LANGUAGE}page=${pageParam}`);
 
   return {
     data: response.results,

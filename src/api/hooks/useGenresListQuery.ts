@@ -1,5 +1,6 @@
 import { fetchWithAuth } from '@/utilities/fetchWithAuth';
 import { useQuery } from '@tanstack/react-query';
+import { TMDB_LANGUAGE } from '../constants';
 
 type Genre = {
   id: number;
@@ -7,7 +8,7 @@ type Genre = {
 };
 
 const getGenresList = async (): Promise<Genre[]> => {
-  const response = await fetchWithAuth('/_api/genre/movie/list');
+  const response = await fetchWithAuth(`/_api/genre/movie/list?language=${TMDB_LANGUAGE}`);
 
   return response.genres;
 };
