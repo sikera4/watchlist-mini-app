@@ -15,7 +15,7 @@ const ExplorePage = () => {
   const moviesListQuery = useMoviesListQuery();
   const moviesSearchQuery = useMoviesSearchQuery(searchTerm);
 
-  const { register, handleSubmit: rhfHandleSubmit } = useForm<SearchFormValues>();
+  const { register, handleSubmit: rhfHandleSubmit, reset } = useForm<SearchFormValues>();
 
   const isScrolledToBottom = useIsScrolledToBottom(undefined, {
     offset: 200,
@@ -43,9 +43,14 @@ const ExplorePage = () => {
 
   const isLoading = moviesListQuery.isLoading || moviesSearchQuery.isLoading;
 
+  const handleResetSearchFormButtonClick = () => {
+    setSearchTerm('');
+    reset();
+  };
+
   return (
-    <div className="p-4 relative min-h-screen">
-      <div className="bg-background">
+    <div className="px-4 pb-4 relative min-h-screen">
+      <div className="bg-background py-4 sticky top-0 z-10">
         <form onSubmit={rhfHandleSubmit(handleSubmit)}>
           <div className="grid grid-cols-6 gap-4">
             <Input
@@ -54,11 +59,23 @@ const ExplorePage = () => {
               label={t('searchPlaceholder')}
               autoComplete="off"
               radius="lg"
+              isDisabled={Boolean(searchTerm)}
               {...register('searchInput')}
             />
-            <Button className="col-span-2" variant="solid" type="submit" size="lg">
-              {t('searchButtonCaption')}
-            </Button>
+            {Boolean(searchTerm) ? (
+              <Button
+                className="col-span-2"
+                variant="solid"
+                onPress={handleResetSearchFormButtonClick}
+                size="lg"
+              >
+                {t('clearSearchButtonCaption')}
+              </Button>
+            ) : (
+              <Button className="col-span-2" variant="solid" type="submit" size="lg">
+                {t('searchButtonCaption')}
+              </Button>
+            )}
           </div>
         </form>
       </div>
@@ -67,7 +84,7 @@ const ExplorePage = () => {
           <Spinner size="lg" />
         </div>
       ) : (
-        <div className="grid grid-cols-2 gap-4 mt-4">
+        <div className="grid grid-cols-2 gap-4">
           {(searchTerm ? moviesSearchQuery.data : moviesListQuery.data)?.pages.map((page, i) => (
             <React.Fragment key={i}>
               {page.data.map((movie) => (

@@ -1,6 +1,7 @@
 {
   "ListPage": {
     "searchPlaceholder": "Поищите чего-нибудь",
-    "searchButtonCaption": "Искать"
+    "searchButtonCaption": "Искать",
+    "clearSearchButtonCaption": "Назад"
   }
 }
