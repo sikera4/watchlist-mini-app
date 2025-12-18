@@ -1,17 +1,17 @@
-import { Movie } from '@/api';
-import AddMovieModal from './AddMovieModal';
+import AddToWatchlistModal from './AddToWatchlistModal';
+import { CardData } from './types';
 
 type Params = {
   isVisible: boolean;
-  movie: Movie;
+  mediaItem: CardData;
 };
 
-const CardOverlay = ({ isVisible, movie }: Params) => {
+const CardOverlay = ({ isVisible, mediaItem }: Params) => {
   return (
     <div
       className={`flex opacity-${isVisible ? 1 : 0} absolute top-0 left-0 right-0 bottom-0 bg-background/60 justify-center items-center transition-opacity duration-200`}
     >
-      {isVisible && <AddMovieModal movie={movie} />}
+      {isVisible && <AddToWatchlistModal mediaItem={mediaItem} />}
     </div>
   );
 };

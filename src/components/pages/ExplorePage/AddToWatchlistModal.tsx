@@ -1,4 +1,4 @@
-import { Movie, useAddMovieToWatchlistMutation } from '@/api';
+import { useAddToWatchlistMutation } from '@/api';
 import { List } from '@/api/types';
 import { useWatchlists } from '@/hooks/useWatchlists';
 import {
@@ -11,17 +11,18 @@ import {
   Spinner,
   useDisclosure,
 } from '@heroui/react';
+import { CardData } from './types';
 
 type Props = {
-  movie: Movie;
+  mediaItem: CardData;
 };
 
-const AddMovieModal = ({ movie }: Props) => {
+const AddToWatchlistModal = ({ mediaItem }: Props) => {
   const { isOpen, onOpenChange } = useDisclosure();
 
   const { watchlists, isLoading } = useWatchlists();
 
-  const addMovieToWatchlistMutation = useAddMovieToWatchlistMutation({
+  const addToWatchlistMutation = useAddToWatchlistMutation({
     onSuccess: () => {
       addToast({
         title: 'Фильм успешно добавлен!',
@@ -37,13 +38,13 @@ const AddMovieModal = ({ movie }: Props) => {
   });
 
   const handleAddMovieClick = (watchlist: List) => {
-    addMovieToWatchlistMutation.mutate({
+    addToWatchlistMutation.mutate({
       watchlistId: watchlist.id,
       movie: {
-        id: movie.id,
-        title: movie.title,
-        poster_path: movie.poster_path,
-        release_date: movie.release_date,
+        id: mediaItem.id,
+        title: mediaItem.title,
+        poster_path: mediaItem.posterPath,
+        release_date: mediaItem.releaseDate,
         isSeen: false,
       },
     });
@@ -67,8 +68,8 @@ const AddMovieModal = ({ movie }: Props) => {
                       <Button
                         onPress={() => handleAddMovieClick(watchlist)}
                         isLoading={
-                          addMovieToWatchlistMutation.isPending &&
-                          addMovieToWatchlistMutation.variables.watchlistId === watchlist.id
+                          addToWatchlistMutation.isPending &&
+                          addToWatchlistMutation.variables.watchlistId === watchlist.id
                         }
                       >
                         Add
@@ -89,4 +90,4 @@ const AddMovieModal = ({ movie }: Props) => {
   );
 };
 
-export default AddMovieModal;
+export default AddToWatchlistModal;

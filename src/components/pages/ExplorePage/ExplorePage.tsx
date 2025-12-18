@@ -1,19 +1,29 @@
 'use client';
 
-import { useMoviesListQuery, useMoviesSearchQuery } from '@/api';
+import {
+  useMoviesGenresListQuery,
+  useMoviesListQuery,
+  useSearchQuery,
+  useTvShowsGenresListQuery,
+} from '@/api';
 import { useIsScrolledToBottom } from '@/hooks/isScrolledToBottom';
+import { Button, Input, Spinner } from '@heroui/react';
 import { useTranslations } from 'next-intl';
 import React, { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
-import MovieCard from './MovieCard';
+import Card from './Card';
 import { SearchFormValues } from './types';
-import { Button, Input, Spinner } from '@heroui/react';
+import { movieToCardData } from './utilities/movieToCardData';
+import { formatGenres } from './utilities/formatGenres';
+import { tvShowToCardData } from './utilities/tvShowToCardData';
 
 const ExplorePage = () => {
   const [searchTerm, setSearchTerm] = useState('');
 
   const moviesListQuery = useMoviesListQuery();
-  const moviesSearchQuery = useMoviesSearchQuery(searchTerm);
+  const searchQuery = useSearchQuery(searchTerm);
+  const moviesGenresQuery = useMoviesGenresListQuery();
+  const tvShowsGenresQuery = useTvShowsGenresListQuery();
 
   const { register, handleSubmit: rhfHandleSubmit, reset } = useForm<SearchFormValues>();
 
@@ -36,12 +46,12 @@ const ExplorePage = () => {
       moviesListQuery.fetchNextPage();
     }
 
-    if (searchTerm && moviesSearchQuery.hasNextPage) {
-      moviesSearchQuery.fetchNextPage();
+    if (searchTerm && searchQuery.hasNextPage) {
+      searchQuery.fetchNextPage();
     }
   }, [isScrolledToBottom]);
 
-  const isLoading = moviesListQuery.isLoading || moviesSearchQuery.isLoading;
+  const isLoading = moviesListQuery.isLoading || searchQuery.isLoading;
 
   const handleResetSearchFormButtonClick = () => {
     setSearchTerm('');
@@ -85,15 +95,45 @@ const ExplorePage = () => {
         </div>
       ) : (
         <div className="grid grid-cols-2 gap-4">
-          {(searchTerm ? moviesSearchQuery.data : moviesListQuery.data)?.pages.map((page, i) => (
-            <React.Fragment key={i}>
-              {page.data.map((movie) => (
-                <div key={movie.id}>
-                  <MovieCard movie={movie} />
-                </div>
+          {searchTerm
+            ? searchQuery.data?.pages.map((page, i) => (
+                <React.Fragment key={i}>
+                  {page.data.map((mediaItem) => {
+                    const cardData =
+                      mediaItem.media_type === 'movie'
+                        ? movieToCardData(mediaItem)
+                        : tvShowToCardData(mediaItem);
+                    const genres = formatGenres({
+                      genres:
+                        mediaItem.media_type === 'movie'
+                          ? (moviesGenresQuery.data ?? [])
+                          : (tvShowsGenresQuery.data ?? []),
+                      genresIds: mediaItem.genre_ids,
+                    });
+
+                    return (
+                      <div key={mediaItem.id}>
+                        <Card {...cardData} genres={genres} />
+                      </div>
+                    );
+                  })}
+                </React.Fragment>
+              ))
+            : moviesListQuery.data?.pages.map((page, i) => (
+                <React.Fragment key={i}>
+                  {page.data.map((movie) => (
+                    <div key={movie.id}>
+                      <Card
+                        {...movieToCardData(movie)}
+                        genres={formatGenres({
+                          genres: moviesGenresQuery.data ?? [],
+                          genresIds: movie.genre_ids,
+                        })}
+                      />
+                    </div>
+                  ))}
+                </React.Fragment>
               ))}
-            </React.Fragment>
-          ))}
         </div>
       )}
     </div>

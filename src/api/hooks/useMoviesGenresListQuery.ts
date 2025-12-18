@@ -1,21 +1,17 @@
 import { fetchWithAuth } from '@/utilities/fetchWithAuth';
 import { useQuery } from '@tanstack/react-query';
 import { TMDB_LANGUAGE } from '../constants';
+import { Genre } from '../types';
 
-type Genre = {
-  id: number;
-  name: string;
-};
-
-const getGenresList = async (): Promise<Genre[]> => {
+const getMoviesGenresList = async (): Promise<Genre[]> => {
   const response = await fetchWithAuth(`/_api/genre/movie/list?language=${TMDB_LANGUAGE}`);
 
   return response.genres;
 };
 
-export const useGenresListQuery = () => {
+export const useMoviesGenresListQuery = () => {
   return useQuery({
-    queryKey: ['genres', 'list'],
-    queryFn: getGenresList,
+    queryKey: ['genres', 'list', 'movies'],
+    queryFn: getMoviesGenresList,
   });
 };

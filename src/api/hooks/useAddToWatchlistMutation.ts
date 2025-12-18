@@ -9,7 +9,7 @@ type Params = {
   watchlistId: string;
 }
 
-const addMovieToWatchlistMutation = async ({ movie, watchlistId }: Params) => {
+const addToWatchlistMutation = async ({ movie, watchlistId }: Params) => {
   const watchlistDocRef = doc(db, 'watchlists', String(watchlistId));
 
   await updateDoc(watchlistDocRef, {
@@ -17,11 +17,11 @@ const addMovieToWatchlistMutation = async ({ movie, watchlistId }: Params) => {
   })
 }
 
-export const useAddMovieToWatchlistMutation = (options?: UseMutationOptions<unknown, unknown, Params>) => {
+export const useAddToWatchlistMutation = (options?: UseMutationOptions<unknown, unknown, Params>) => {
   const queryClient = useQueryClient();
 
   return useMutation({
-    mutationFn: addMovieToWatchlistMutation,
+    mutationFn: addToWatchlistMutation,
     ...options,
     onSuccess: (...params) => {
       queryClient.invalidateQueries({ queryKey: WATCHLISTS_QUERY_KEY });
