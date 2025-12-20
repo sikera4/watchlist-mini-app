@@ -13,6 +13,7 @@ import {
 } from '@heroui/react';
 import { CardData } from './types';
 import { useTranslations } from 'next-intl';
+import { checkIfWatchlistHasItem } from './utilities/checkIfWatchlistHasItem';
 
 type Props = {
   mediaItem: CardData;
@@ -69,15 +70,11 @@ const AddToWatchlistModal = ({ mediaItem }: Props) => {
                   return (
                     <div key={watchlist.id} className="flex justify-between items-center gap-2">
                       <span>{watchlist.name}</span>
-                      <Button
-                        onPress={() => handleAddMovieClick(watchlist)}
-                        isLoading={
-                          addToWatchlistMutation.isPending &&
-                          addToWatchlistMutation.variables.watchlistId === watchlist.id
-                        }
-                      >
-                        {t('add')}
-                      </Button>
+                      {checkIfWatchlistHasItem({ watchlist, itemId: mediaItem.id }) ? (
+                        <span>{t('added')}</span>
+                      ) : (
+                        <Button onPress={() => handleAddMovieClick(watchlist)}>{t('add')}</Button>
+                      )}
                     </div>
                   );
                 })}
