@@ -9,12 +9,12 @@ const CollectionsPage = () => {
   const { watchlists, isLoading } = useWatchlists();
 
   return (
-    <div className="p-4 min-h-screen">
+    <div className="p-4 min-h-screen relative">
       <h2 className="text-2xl font-bold">Ваши списки</h2>
       <div className="mt-4">
         {isLoading ? (
-          <div className="p-4 flex justify-center">
-            <Spinner />
+          <div className="absolute top-[calc(50%-20px)] left-[calc(50%-20px)]">
+            <Spinner size="lg" />
           </div>
         ) : (
           <div className="flex flex-col">
@@ -37,10 +37,10 @@ const CollectionsPage = () => {
             ) : (
               <span>Списков нет</span>
             )}
+            <CreateListForm className="mt-4" />
           </div>
         )}
       </div>
-      <CreateListForm className="mt-4" />
     </div>
   );
 };

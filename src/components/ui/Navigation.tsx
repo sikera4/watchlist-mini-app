@@ -13,8 +13,8 @@ const Navigation = () => {
   const pathname = usePathname();
 
   return (
-    <nav className="p-4 fixed bottom-0 left-0 right-0 flex justify-center">
-      <Tabs selectedKey={pathname}>
+    <nav className="pb-4 fixed bottom-0 left-0 right-0 flex justify-center pointer-events-none">
+      <Tabs selectedKey={pathname} className="pointer-events-auto">
         {navItems.map(({ route, label }) => (
           <Tab key={route} title={<Link href={route}>{label}</Link>} />
         ))}

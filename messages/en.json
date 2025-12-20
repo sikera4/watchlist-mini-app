@@ -2,6 +2,9 @@
   "ListPage": {
     "searchPlaceholder": "Search for something",
     "searchButtonCaption": "Search",
-    "clearSearchButtonCaption": "Back"
+    "clearSearchButtonCaption": "Back",
+    "add": "Add",
+    "added": "Added",
+    "addToWatchlist": "Add to watchlist"
   }
 }

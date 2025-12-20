@@ -12,6 +12,7 @@ import {
   useDisclosure,
 } from '@heroui/react';
 import { CardData } from './types';
+import { useTranslations } from 'next-intl';
 
 type Props = {
   mediaItem: CardData;
@@ -22,13 +23,9 @@ const AddToWatchlistModal = ({ mediaItem }: Props) => {
 
   const { watchlists, isLoading } = useWatchlists();
 
+  const t = useTranslations('ListPage');
+
   const addToWatchlistMutation = useAddToWatchlistMutation({
-    onSuccess: () => {
-      addToast({
-        title: 'Фильм успешно добавлен!',
-        color: 'success',
-      });
-    },
     onError: () => {
       addToast({
         title: 'Ошибка добавления фильма.',
@@ -48,16 +45,23 @@ const AddToWatchlistModal = ({ mediaItem }: Props) => {
         isSeen: false,
       },
     });
+
+    addToast({
+      color: 'success',
+      title: t('added'),
+      shouldShowTimeoutProgress: true,
+      timeout: 2000,
+    });
   };
 
   const hasWatchlists = !isLoading && watchlists.length > 0;
 
   return (
     <>
-      <Button onPress={onOpenChange}>Add to watchlist</Button>
+      <Button onPress={onOpenChange}>{t('addToWatchlist')}</Button>
       <Modal isOpen={isOpen} onOpenChange={onOpenChange}>
         <ModalContent>
-          <ModalHeader>Add Movie to Watchlist</ModalHeader>
+          <ModalHeader>{t('addToWatchlist')}</ModalHeader>
           <ModalBody>
             {hasWatchlists ? (
               <>
@@ -72,7 +76,7 @@ const AddToWatchlistModal = ({ mediaItem }: Props) => {
                           addToWatchlistMutation.variables.watchlistId === watchlist.id
                         }
                       >
-                        Add
+                        {t('add')}
                       </Button>
                     </div>
                   );

@@ -2,6 +2,9 @@
   "ListPage": {
     "searchPlaceholder": "Поищите чего-нибудь",
     "searchButtonCaption": "Искать",
-    "clearSearchButtonCaption": "Назад"
+    "clearSearchButtonCaption": "Назад",
+    "add": "Добавить",
+    "added": "Добавлено",
+    "addToWatchlist": "Добавить в список"
   }
 }
