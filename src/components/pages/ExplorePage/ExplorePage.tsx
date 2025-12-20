@@ -99,6 +99,10 @@ const ExplorePage = () => {
             ? searchQuery.data?.pages.map((page, i) => (
                 <React.Fragment key={i}>
                   {page.data.map((mediaItem) => {
+                    if (mediaItem.media_type === 'person') {
+                      return null;
+                    }
+
                     const cardData =
                       mediaItem.media_type === 'movie'
                         ? movieToCardData(mediaItem)

@@ -7,7 +7,9 @@ type MediaItem = {
   media_type: 'movie';
 } & Movie | {
   media_type: 'tv';
-} & TvShow;
+} & TvShow | {
+  media_type: 'person';
+};
 
 const search = async ({
   pageParam,
