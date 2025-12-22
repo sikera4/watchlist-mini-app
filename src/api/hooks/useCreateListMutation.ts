@@ -1,7 +1,8 @@
 import { db } from '@/utilities/initializeFirebase';
 import { useMutation, UseMutationOptions, useQueryClient } from '@tanstack/react-query';
 import { addDoc, arrayUnion, collection, doc, updateDoc } from 'firebase/firestore';
-import { WATCHLISTS_QUERY_KEY } from './useWatchlistsQuery';
+import { getUserDataQueryKey } from './useUserDataQuery';
+import { getWatchlistsQueryKey } from './useWatchlistsQuery';
 
 type Params = {
   name?: string;
@@ -31,10 +32,11 @@ export const useCreateListMutation = (options?: UseMutationOptions<unknown, unkn
   return useMutation({
     ...options,
     mutationFn: createList,
-    onSuccess: (...params) => {
-      queryClient.invalidateQueries({ queryKey: WATCHLISTS_QUERY_KEY });
+    onSuccess: async (_, variables, ...otherParams) => {
+      await queryClient.invalidateQueries({ queryKey: getUserDataQueryKey(variables.userId) });
+      await queryClient.invalidateQueries({ queryKey: getWatchlistsQueryKey() });
 
-      options?.onSuccess?.(...params);
+      options?.onSuccess?.(_, variables, ...otherParams);
     }
   });
 };

@@ -2,7 +2,7 @@ import { db } from "@/utilities/initializeFirebase";
 import { useMutation, UseMutationOptions, useQueryClient } from "@tanstack/react-query";
 import { doc, getDoc, updateDoc } from "firebase/firestore";
 import { MediaItem } from "../types";
-import { WATCHLISTS_QUERY_KEY } from "./useWatchlistsQuery";
+import { getWatchlistsQueryKey } from "./useWatchlistsQuery";
 
 type Params = {
   watchlistId: string;
@@ -20,7 +20,7 @@ const markAsSeen = async ({
   const watchedMoviesList: MediaItem[] = [];
   const moviesToWatchList: MediaItem[] = [];
 
-  const watchlistMovies: MediaItem[] = watchlistDoc.data()?.movies || [];
+  const watchlistMovies: MediaItem[] = watchlistDoc.data()?.items || [];
 
   watchlistMovies.forEach((movie) => {
     if (movie.isSeen) {
@@ -42,7 +42,7 @@ const markAsSeen = async ({
   })
 
   await updateDoc(watchlistDocRef, {
-    movies: [...watchedMoviesList, ...moviesToWatchList],
+    items: [...watchedMoviesList, ...moviesToWatchList],
   })
 }
 
@@ -55,7 +55,7 @@ export const useMarkAsSeenMutation = (options?: UseMutationOptions<unknown, unkn
     onSuccess: (...params) => {
       options?.onSuccess?.(...params);
 
-      queryClient.invalidateQueries({ queryKey: WATCHLISTS_QUERY_KEY })
+      queryClient.invalidateQueries({ queryKey: getWatchlistsQueryKey() })
     }
   })
 }

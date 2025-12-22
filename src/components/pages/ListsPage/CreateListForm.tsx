@@ -12,7 +12,7 @@ type Props = {
 };
 
 const CreateCollectionForm = ({ className }: Props) => {
-  const { register, handleSubmit: rhfHandleSubmit } = useForm<CreateListFormValues>();
+  const { register, handleSubmit: rhfHandleSubmit, reset } = useForm<CreateListFormValues>();
 
   const [isFormMode, setIsFormMode] = useState(false);
   const tgWebApp = useTelegramApp();
@@ -20,6 +20,7 @@ const CreateCollectionForm = ({ className }: Props) => {
   const createListMutation = useCreateListMutation({
     onSuccess: () => {
       setIsFormMode(false);
+      reset();
 
       addToast({
         title: 'Список успешно создан',
@@ -35,7 +36,7 @@ const CreateCollectionForm = ({ className }: Props) => {
   });
 
   const handleSubmit = (data: CreateListFormValues) => {
-    const userId = tgWebApp?.initDataUnsafe?.user?.id;
+    const userId = tgWebApp?.initDataUnsafe?.user?.id || 1;
 
     if (userId) {
       createListMutation.mutate({ name: data.name, userId });

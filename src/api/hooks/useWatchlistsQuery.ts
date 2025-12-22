@@ -4,7 +4,10 @@ import { useQuery } from '@tanstack/react-query';
 import { collection, documentId, getDocs, query, where } from 'firebase/firestore';
 import { List } from '../types';
 
-export const WATCHLISTS_QUERY_KEY = ['user', 'lists'];
+export const getWatchlistsQueryKey = (watchlistsIds: string[] = []) => [
+  ...['user', 'lists'],
+  ...watchlistsIds,
+];
 
 const getWatchlists = async (watchlistsIds: string[] = []) => {
   const watchlistsCollection = collection(db, 'watchlists');
@@ -29,6 +32,6 @@ export const useWatchlistsQuery = (
   return useQuery({
     ...options,
     queryFn: () => getWatchlists(watchlistsIds),
-    queryKey: WATCHLISTS_QUERY_KEY,
+    queryKey: getWatchlistsQueryKey(watchlistsIds),
   });
 };
