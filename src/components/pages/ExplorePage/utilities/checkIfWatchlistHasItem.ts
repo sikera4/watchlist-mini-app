@@ -6,5 +6,5 @@ type Params = {
 }
 
 export const checkIfWatchlistHasItem = ({ itemId, watchlist }: Params) => {
-  return watchlist.movies.some((movie) => movie.id === itemId);
+  return watchlist.items.some((item) => item.id === itemId);
 }

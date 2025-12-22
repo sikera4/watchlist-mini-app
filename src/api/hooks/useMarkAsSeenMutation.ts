@@ -1,7 +1,7 @@
 import { db } from "@/utilities/initializeFirebase";
 import { useMutation, UseMutationOptions, useQueryClient } from "@tanstack/react-query";
 import { doc, getDoc, updateDoc } from "firebase/firestore";
-import { MovieInList } from "../types";
+import { MediaItem } from "../types";
 import { WATCHLISTS_QUERY_KEY } from "./useWatchlistsQuery";
 
 type Params = {
@@ -17,10 +17,10 @@ const markAsSeen = async ({
 
   const watchlistDoc = await getDoc(watchlistDocRef);
 
-  const watchedMoviesList: MovieInList[] = [];
-  const moviesToWatchList: MovieInList[] = [];
+  const watchedMoviesList: MediaItem[] = [];
+  const moviesToWatchList: MediaItem[] = [];
 
-  const watchlistMovies: MovieInList[] = watchlistDoc.data()?.movies || [];
+  const watchlistMovies: MediaItem[] = watchlistDoc.data()?.movies || [];
 
   watchlistMovies.forEach((movie) => {
     if (movie.isSeen) {

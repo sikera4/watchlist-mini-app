@@ -13,7 +13,11 @@ export type TvShow = {
   genre_ids: number[];
 }
 
-export type MovieInList = Omit<Movie, 'genre_ids'> & {
+export type MediaItem = {
+  id: number;
+  title: string;
+  releaseDate?: string;
+  posterPath: string;
   isSeen: boolean;
 }
 
@@ -21,7 +25,7 @@ export type List = {
   id: string;
   name?: string;
   usersIds: number[];
-  movies: MovieInList[];
+  items: MediaItem[];
 };
 
 export type User = {

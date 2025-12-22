@@ -1,4 +1,4 @@
-import { MovieInList, useMarkAsSeenMutation } from '@/api';
+import { MediaItem, useMarkAsSeenMutation } from '@/api';
 import ImageWithFallback from '@/components/ui/ImageWithFallback';
 import { formatYear } from '@/utilities/formatYear';
 import { getImageSrcByPath } from '@/utilities/getImageSrcByPath';
@@ -6,12 +6,12 @@ import { addToast, Button } from '@heroui/react';
 import { FaCircleCheck, FaEye } from 'react-icons/fa6';
 
 type Props = {
-  movie: MovieInList;
+  item: MediaItem;
   watchlistId: string;
 };
 
-const MovieListItem = ({ movie, watchlistId }: Props) => {
-  const { title, release_date: releaseDate, poster_path: posterPath, isSeen, id } = movie;
+const ListItem = ({ item, watchlistId }: Props) => {
+  const { title, releaseDate, posterPath, isSeen, id } = item;
 
   const markAsSeenMutation = useMarkAsSeenMutation({
     onSuccess: () => {
@@ -70,4 +70,4 @@ const MovieListItem = ({ movie, watchlistId }: Props) => {
   );
 };
 
-export default MovieListItem;
+export default ListItem;

@@ -2,10 +2,10 @@ import { db } from "@/utilities/initializeFirebase";
 import { useMutation, UseMutationOptions, useQueryClient } from "@tanstack/react-query";
 import { arrayUnion, doc, updateDoc } from "firebase/firestore";
 import { WATCHLISTS_QUERY_KEY } from "./useWatchlistsQuery";
-import { MovieInList } from "../types";
+import { MediaItem } from "../types";
 
 type Params = {
-  movie: MovieInList;
+  movie: MediaItem;
   watchlistId: string;
 }
 

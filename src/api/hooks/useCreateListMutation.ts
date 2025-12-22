@@ -13,7 +13,7 @@ const createList = async (params: Params) => {
   const watchlistDocRef = await addDoc(watchlistsCollectionRef, {
     name: params.name ?? 'New Watchlist',
     userIds: [params.userId],
-    movies: [],
+    items: [],
   });
 
   const watchlistId = watchlistDocRef.id;

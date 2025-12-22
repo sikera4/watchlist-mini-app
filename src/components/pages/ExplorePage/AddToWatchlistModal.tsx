@@ -41,8 +41,8 @@ const AddToWatchlistModal = ({ mediaItem }: Props) => {
       movie: {
         id: mediaItem.id,
         title: mediaItem.title,
-        poster_path: mediaItem.posterPath,
-        release_date: mediaItem.releaseDate,
+        posterPath: mediaItem.posterPath,
+        releaseDate: mediaItem.releaseDate,
         isSeen: false,
       },
     });
@@ -71,7 +71,7 @@ const AddToWatchlistModal = ({ mediaItem }: Props) => {
                     <div key={watchlist.id} className="flex justify-between items-center gap-2">
                       <span>{watchlist.name}</span>
                       {checkIfWatchlistHasItem({ watchlist, itemId: mediaItem.id }) ? (
-                        <span>{t('added')}</span>
+                        <Button isDisabled={true}>{t('added')}</Button>
                       ) : (
                         <Button onPress={() => handleAddMovieClick(watchlist)}>{t('add')}</Button>
                       )}

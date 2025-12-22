@@ -58,6 +58,54 @@ const ExplorePage = () => {
     reset();
   };
 
+  const renderSearchedItems = () => {
+    return searchQuery.data?.pages.map((page, i) => (
+      <React.Fragment key={i}>
+        {page.data.map((mediaItem) => {
+          if (mediaItem.media_type === 'person') {
+            return null;
+          }
+
+          const cardData =
+            mediaItem.media_type === 'movie'
+              ? movieToCardData(mediaItem)
+              : tvShowToCardData(mediaItem);
+          const genres = formatGenres({
+            genres:
+              mediaItem.media_type === 'movie'
+                ? (moviesGenresQuery.data ?? [])
+                : (tvShowsGenresQuery.data ?? []),
+            genresIds: mediaItem.genre_ids,
+          });
+
+          return (
+            <div key={mediaItem.id}>
+              <Card {...cardData} genres={genres} />
+            </div>
+          );
+        })}
+      </React.Fragment>
+    ));
+  };
+
+  const renderMoviesList = () => {
+    return moviesListQuery.data?.pages.map((page, i) => (
+      <React.Fragment key={i}>
+        {page.data.map((movie) => (
+          <div key={movie.id}>
+            <Card
+              {...movieToCardData(movie)}
+              genres={formatGenres({
+                genres: moviesGenresQuery.data ?? [],
+                genresIds: movie.genre_ids,
+              })}
+            />
+          </div>
+        ))}
+      </React.Fragment>
+    ));
+  };
+
   return (
     <div className="px-4 pb-4 relative min-h-screen">
       <div className="bg-background py-4 sticky top-0 z-10">
@@ -95,49 +143,7 @@ const ExplorePage = () => {
         </div>
       ) : (
         <div className="grid grid-cols-2 gap-4">
-          {searchTerm
-            ? searchQuery.data?.pages.map((page, i) => (
-                <React.Fragment key={i}>
-                  {page.data.map((mediaItem) => {
-                    if (mediaItem.media_type === 'person') {
-                      return null;
-                    }
-
-                    const cardData =
-                      mediaItem.media_type === 'movie'
-                        ? movieToCardData(mediaItem)
-                        : tvShowToCardData(mediaItem);
-                    const genres = formatGenres({
-                      genres:
-                        mediaItem.media_type === 'movie'
-                          ? (moviesGenresQuery.data ?? [])
-                          : (tvShowsGenresQuery.data ?? []),
-                      genresIds: mediaItem.genre_ids,
-                    });
-
-                    return (
-                      <div key={mediaItem.id}>
-                        <Card {...cardData} genres={genres} />
-                      </div>
-                    );
-                  })}
-                </React.Fragment>
-              ))
-            : moviesListQuery.data?.pages.map((page, i) => (
-                <React.Fragment key={i}>
-                  {page.data.map((movie) => (
-                    <div key={movie.id}>
-                      <Card
-                        {...movieToCardData(movie)}
-                        genres={formatGenres({
-                          genres: moviesGenresQuery.data ?? [],
-                          genresIds: movie.genre_ids,
-                        })}
-                      />
-                    </div>
-                  ))}
-                </React.Fragment>
-              ))}
+          {searchTerm ? renderSearchedItems() : renderMoviesList()}
         </div>
       )}
     </div>

@@ -3,7 +3,7 @@
 import { useWatchlists } from '@/hooks/useWatchlists';
 import { Accordion, AccordionItem, Spinner } from '@heroui/react';
 import CreateListForm from './CreateListForm';
-import MovieListItem from './MovieListItem';
+import ListItem from './ListItem';
 
 const CollectionsPage = () => {
   const { watchlists, isLoading } = useWatchlists();
@@ -23,9 +23,9 @@ const CollectionsPage = () => {
                 {watchlists.map((watchlist, i) => (
                   <AccordionItem key={i} title={watchlist.name}>
                     <ul className="list-none flex flex-col gap-2">
-                      {watchlist.movies.length ? (
-                        watchlist.movies.map((movie) => (
-                          <MovieListItem key={movie.id} movie={movie} watchlistId={watchlist.id} />
+                      {watchlist.items.length ? (
+                        watchlist.items.map((item) => (
+                          <ListItem key={item.id} item={item} watchlistId={watchlist.id} />
                         ))
                       ) : (
                         <span>Список пуст</span>
