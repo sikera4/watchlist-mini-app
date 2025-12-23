@@ -1,8 +1,7 @@
 import { MediaItem, useMarkAsSeenMutation } from '@/api';
-import ImageWithFallback from '@/components/ui/ImageWithFallback';
 import { formatYear } from '@/utilities/formatYear';
 import { getImageSrcByPath } from '@/utilities/getImageSrcByPath';
-import { addToast, Button } from '@heroui/react';
+import { addToast, Button, Image } from '@heroui/react';
 import { FaCircleCheck, FaEye } from 'react-icons/fa6';
 
 type Props = {
@@ -36,14 +35,13 @@ const ListItem = ({ item, watchlistId }: Props) => {
 
   return (
     <div className="flex relative gap-4 items-center">
-      <div className="rounded-md overflow-hidden relative w-12 h-18">
-        <ImageWithFallback
+      <div className="rounded-md overflow-hidden">
+        <Image
           src={getImageSrcByPath(posterPath)}
           alt={`${title} poster`}
-          fill={true}
-          style={{
-            objectFit: 'cover',
-          }}
+          height={72}
+          width={48}
+          className="static object-cover rounded-md"
         />
       </div>
       <div>

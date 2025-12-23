@@ -1,4 +1,4 @@
-import Image, { ImageProps } from 'next/image';
+import { Image, ImageProps } from '@heroui/react';
 import { useState } from 'react';
 
 const PLACEHOLDER_URL = '/nothing_silhouette.webp';

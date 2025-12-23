@@ -1,8 +1,8 @@
-import ImageWithFallback from '@/components/ui/ImageWithFallback';
 import { getImageSrcByPath } from '@/utilities/getImageSrcByPath';
 import { useState } from 'react';
 import CardOverlay from './CardOverlay';
 import { CardData } from './types';
+import { Image } from '@heroui/react';
 
 type Props = CardData;
 
@@ -11,14 +11,12 @@ const Card = ({ title, posterPath, genres, releaseDate, id }: Props) => {
 
   return (
     <div className="relative" onClick={() => setIsTapped(!isTapped)}>
-      <div className="rounded-md overflow-hidden relative bg-content1-foreground h-[270px]">
-        <ImageWithFallback
-          src={getImageSrcByPath(posterPath)}
+      <div className="rounded-md overflow-hidden">
+        <Image
           alt={`${title} poster`}
-          fill={true}
-          style={{
-            objectFit: 'cover',
-          }}
+          className="static rounded-md object-cover"
+          height={270}
+          src={getImageSrcByPath(posterPath)}
         />
       </div>
       <h4 className="text-lg font-bold mt-2">{title ?? name}</h4>

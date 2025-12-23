@@ -63,7 +63,7 @@ const AddToWatchlistModal = ({ mediaItem }: Props) => {
       <Modal isOpen={isOpen} onOpenChange={onOpenChange}>
         <ModalContent>
           <ModalHeader>{t('addToWatchlist')}</ModalHeader>
-          <ModalBody>
+          <ModalBody className="pb-4">
             {hasWatchlists ? (
               <>
                 {watchlists.map((watchlist) => {

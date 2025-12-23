@@ -1,21 +1,10 @@
 import Providers from '@/components/providers';
+import ReactQueryProvider from '@/components/providers/ReactQueryProvider';
 import Navigation from '@/components/ui/Navigation';
 import type { Metadata } from 'next';
 import { NextIntlClientProvider } from 'next-intl';
-import { Geist, Geist_Mono } from 'next/font/google';
 import Script from 'next/script';
 import './globals.css';
-import ReactQueryProvider from '@/components/providers/ReactQueryProvider';
-
-const geistSans = Geist({
-  variable: '--font-geist-sans',
-  subsets: ['latin'],
-});
-
-const geistMono = Geist_Mono({
-  variable: '--font-geist-mono',
-  subsets: ['latin'],
-});
 
 export const metadata: Metadata = {
   title: 'Watchlist Mini App',
@@ -32,7 +21,7 @@ export default async function RootLayout({
       <head>
         <Script src="https://telegram.org/js/telegram-web-app.js?59" strategy="beforeInteractive" />
       </head>
-      <body className={`${geistSans.variable} ${geistMono.variable} antialiased`}>
+      <body className="antialiased">
         <ReactQueryProvider>
           <NextIntlClientProvider>
             <Providers>
