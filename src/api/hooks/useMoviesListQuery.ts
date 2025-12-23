@@ -1,7 +1,7 @@
 import { fetchWithAuth } from '@/utilities/fetchWithAuth';
 import { useInfiniteQuery } from '@tanstack/react-query';
-import { Movie } from '../types';
 import { TMDB_LANGUAGE } from '../constants';
+import { Movie } from '../types';
 
 const getMoviesList = async ({
   pageParam,
@@ -19,11 +19,13 @@ const getMoviesList = async ({
   };
 };
 
+export const MOVIES_LIST_INFINITE_QUERY_OPTIONS = {
+  queryKey: ['movies', 'popular'],
+  queryFn: getMoviesList,
+  initialPageParam: 1,
+  getNextPageParam: (lastPage: { nextCursor?: number }) => lastPage.nextCursor,
+}
+
 export const useMoviesListQuery = () => {
-  return useInfiniteQuery({
-    queryKey: ['movies', 'popular'],
-    queryFn: getMoviesList,
-    initialPageParam: 1,
-    getNextPageParam: (lastPage) => lastPage.nextCursor,
-  });
+  return useInfiniteQuery(MOVIES_LIST_INFINITE_QUERY_OPTIONS);
 };

@@ -1,11 +1,6 @@
 'use client';
 
-import {
-  useMoviesGenresListQuery,
-  useMoviesListQuery,
-  useSearchQuery,
-  useTvShowsGenresListQuery,
-} from '@/api';
+import { Genre, useMoviesListQuery, useSearchQuery } from '@/api';
 import { useIsScrolledToBottom } from '@/hooks/isScrolledToBottom';
 import { Button, Input, Spinner } from '@heroui/react';
 import { useTranslations } from 'next-intl';
@@ -17,13 +12,16 @@ import { movieToCardData } from './utilities/movieToCardData';
 import { formatGenres } from './utilities/formatGenres';
 import { tvShowToCardData } from './utilities/tvShowToCardData';
 
-const ExplorePage = () => {
+type Props = {
+  moviesGenresList: Genre[];
+  tvShowsGenresList: Genre[];
+};
+
+const ExplorePage = ({ moviesGenresList, tvShowsGenresList }: Props) => {
   const [searchTerm, setSearchTerm] = useState('');
 
   const moviesListQuery = useMoviesListQuery();
   const searchQuery = useSearchQuery(searchTerm);
-  const moviesGenresQuery = useMoviesGenresListQuery();
-  const tvShowsGenresQuery = useTvShowsGenresListQuery();
 
   const { register, handleSubmit: rhfHandleSubmit, reset } = useForm<SearchFormValues>();
 
@@ -71,10 +69,7 @@ const ExplorePage = () => {
               ? movieToCardData(mediaItem)
               : tvShowToCardData(mediaItem);
           const genres = formatGenres({
-            genres:
-              mediaItem.media_type === 'movie'
-                ? (moviesGenresQuery.data ?? [])
-                : (tvShowsGenresQuery.data ?? []),
+            genres: mediaItem.media_type === 'movie' ? moviesGenresList : tvShowsGenresList,
             genresIds: mediaItem.genre_ids,
           });
 
@@ -96,7 +91,7 @@ const ExplorePage = () => {
             <Card
               {...movieToCardData(movie)}
               genres={formatGenres({
-                genres: moviesGenresQuery.data ?? [],
+                genres: moviesGenresList,
                 genresIds: movie.genre_ids,
               })}
             />

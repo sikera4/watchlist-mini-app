@@ -1,8 +1,7 @@
 'use client';
 
 import { HeroUIProvider, ToastProvider } from '@heroui/react';
-import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
-import { ReactNode, useState } from 'react';
+import { ReactNode } from 'react';
 import TelegramAppProvider from './TelegramAppProvider';
 import ThemeProvider from './ThemeProvider';
 
@@ -11,28 +10,13 @@ type Props = {
 };
 
 const ClientProviders = ({ children }: Props) => {
-  const [queryClient] = useState(
-    () =>
-      new QueryClient({
-        defaultOptions: {
-          queries: {
-            retry: 2,
-            refetchOnMount: false,
-            refetchOnWindowFocus: false,
-          },
-        },
-      })
-  );
-
   return (
-    <QueryClientProvider client={queryClient}>
-      <TelegramAppProvider>
-        <HeroUIProvider>
-          <ThemeProvider>{children}</ThemeProvider>
-          <ToastProvider placement="top-center" />
-        </HeroUIProvider>
-      </TelegramAppProvider>
-    </QueryClientProvider>
+    <TelegramAppProvider>
+      <HeroUIProvider>
+        <ThemeProvider>{children}</ThemeProvider>
+        <ToastProvider placement="top-center" />
+      </HeroUIProvider>
+    </TelegramAppProvider>
   );
 };
 

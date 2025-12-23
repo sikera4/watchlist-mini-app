@@ -5,6 +5,7 @@ import { NextIntlClientProvider } from 'next-intl';
 import { Geist, Geist_Mono } from 'next/font/google';
 import Script from 'next/script';
 import './globals.css';
+import ReactQueryProvider from '@/components/providers/ReactQueryProvider';
 
 const geistSans = Geist({
   variable: '--font-geist-sans',
@@ -32,12 +33,14 @@ export default async function RootLayout({
         <Script src="https://telegram.org/js/telegram-web-app.js?59" strategy="beforeInteractive" />
       </head>
       <body className={`${geistSans.variable} ${geistMono.variable} antialiased`}>
-        <NextIntlClientProvider>
-          <Providers>
-            {children}
-            <Navigation />
-          </Providers>
-        </NextIntlClientProvider>
+        <ReactQueryProvider>
+          <NextIntlClientProvider>
+            <Providers>
+              {children}
+              <Navigation />
+            </Providers>
+          </NextIntlClientProvider>
+        </ReactQueryProvider>
       </body>
     </html>
   );

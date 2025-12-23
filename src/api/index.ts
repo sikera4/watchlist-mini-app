@@ -1,11 +1,11 @@
 export { useAddToWatchlistMutation } from './hooks/useAddToWatchlistMutation';
-export { useMoviesListQuery } from './hooks/useMoviesListQuery';
-export { useMoviesGenresListQuery } from './hooks/useMoviesGenresListQuery';
-export { useTvShowsGenresListQuery } from './hooks/useTvShowsGenresListQuery';
+export { useMoviesListQuery, MOVIES_LIST_INFINITE_QUERY_OPTIONS } from './hooks/useMoviesListQuery';
 export { useSearchQuery } from './hooks/useSearchQuery';
 export { useAddUserMutation } from './hooks/useAddUserMutation';
 export { useCreateListMutation } from './hooks/useCreateListMutation';
 export { useUserDataQuery } from './hooks/useUserDataQuery';
 export { useWatchlistsQuery, getWatchlistsQueryKey } from './hooks/useWatchlistsQuery';
 export { useMarkAsSeenMutation } from './hooks/useMarkAsSeenMutation';
+export { getMoviesGenresList } from './requests/getMoviesGenresList';
+export { getTvShowsGenresList } from './requests/getTvShowsGenresList';
 export type { Movie, MediaItem, TvShow, Genre, List } from './types';
