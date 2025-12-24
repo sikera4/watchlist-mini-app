@@ -10,20 +10,15 @@ import ExplorePage from './ExplorePage';
 const ServerExplorePage = async () => {
   const queryClient = getQueryClient();
 
-  await queryClient.prefetchInfiniteQuery(MOVIES_LIST_INFINITE_QUERY_OPTIONS);
-
-  const [_, moviesGenresList, tvShowsGenresList] = await Promise.all([
-    queryClient.prefetchInfiniteQuery(MOVIES_LIST_INFINITE_QUERY_OPTIONS),
+  const [moviesGenresList, tvShowsGenresList] = await Promise.all([
     getMoviesGenresList(),
     getTvShowsGenresList(),
+    queryClient.prefetchInfiniteQuery(MOVIES_LIST_INFINITE_QUERY_OPTIONS),
   ]);
 
   return (
     <HydrationBoundary state={dehydrate(queryClient)}>
-      <ExplorePage
-        moviesGenresList={moviesGenresList ?? []}
-        tvShowsGenresList={tvShowsGenresList ?? []}
-      />
+      <ExplorePage moviesGenresList={moviesGenresList} tvShowsGenresList={tvShowsGenresList} />
     </HydrationBoundary>
   );
 };
