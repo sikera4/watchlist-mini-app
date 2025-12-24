@@ -1,8 +1,10 @@
 import { MediaItem, useMarkAsSeenMutation } from '@/api';
+import { PLACEHOLDER_URL } from '@/constants';
 import { formatYear } from '@/utilities/formatYear';
 import { getImageSrcByPath } from '@/utilities/getImageSrcByPath';
 import { addToast, Button, Image } from '@heroui/react';
 import { FaCircleCheck, FaEye } from 'react-icons/fa6';
+import NextImage from 'next/image';
 
 type Props = {
   item: MediaItem;
@@ -42,6 +44,8 @@ const ListItem = ({ item, watchlistId }: Props) => {
           height={72}
           width={48}
           className="static object-cover rounded-md"
+          fallbackSrc={PLACEHOLDER_URL}
+          as={NextImage}
         />
       </div>
       <div>
