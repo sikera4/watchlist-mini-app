@@ -1,8 +1,5 @@
-import { useAddToWatchlistMutation } from '@/api';
-import { List } from '@/api/types';
 import { useWatchlists } from '@/hooks/useWatchlists';
 import {
-  addToast,
   Button,
   Modal,
   ModalBody,
@@ -11,9 +8,9 @@ import {
   Spinner,
   useDisclosure,
 } from '@heroui/react';
-import { CardData } from './types';
 import { useTranslations } from 'next-intl';
-import { checkIfWatchlistHasItem } from './utilities/checkIfWatchlistHasItem';
+import AddToWatchlistItem from './AddToWatchlistItem';
+import { CardData } from './types';
 
 type Props = {
   mediaItem: CardData;
@@ -25,35 +22,6 @@ const AddToWatchlistModal = ({ mediaItem }: Props) => {
   const { watchlists, isLoading } = useWatchlists();
 
   const t = useTranslations('ListPage');
-
-  const addToWatchlistMutation = useAddToWatchlistMutation({
-    onError: () => {
-      addToast({
-        title: 'Ошибка добавления фильма.',
-        color: 'danger',
-      });
-    },
-  });
-
-  const handleAddMovieClick = (watchlist: List) => {
-    addToWatchlistMutation.mutate({
-      watchlistId: watchlist.id,
-      movie: {
-        id: mediaItem.id,
-        title: mediaItem.title,
-        posterPath: mediaItem.posterPath,
-        releaseDate: mediaItem.releaseDate,
-        isSeen: false,
-      },
-    });
-
-    addToast({
-      color: 'success',
-      title: t('added'),
-      shouldShowTimeoutProgress: true,
-      timeout: 2000,
-    });
-  };
 
   const hasWatchlists = !isLoading && watchlists.length > 0;
 
@@ -68,14 +36,11 @@ const AddToWatchlistModal = ({ mediaItem }: Props) => {
               <>
                 {watchlists.map((watchlist) => {
                   return (
-                    <div key={watchlist.id} className="flex justify-between items-center gap-2">
-                      <span>{watchlist.name}</span>
-                      {checkIfWatchlistHasItem({ watchlist, itemId: mediaItem.id }) ? (
-                        <Button isDisabled={true}>{t('added')}</Button>
-                      ) : (
-                        <Button onPress={() => handleAddMovieClick(watchlist)}>{t('add')}</Button>
-                      )}
-                    </div>
+                    <AddToWatchlistItem
+                      key={watchlist.id}
+                      watchlist={watchlist}
+                      mediaItem={mediaItem}
+                    />
                   );
                 })}
               </>
