@@ -6,6 +6,7 @@ import { useForm } from 'react-hook-form';
 import { CreateListFormValues } from './types';
 import { useTelegramApp } from '@/components/providers/TelegramAppProvider';
 import { addToast, Button, Input } from '@heroui/react';
+import { useRegisterHapticFeedback } from '@/hooks/useRegisterHapticFeedback';
 
 type Props = {
   className?: string;
@@ -15,7 +16,9 @@ const CreateCollectionForm = ({ className }: Props) => {
   const { register, handleSubmit: rhfHandleSubmit, reset } = useForm<CreateListFormValues>();
 
   const [isFormMode, setIsFormMode] = useState(false);
+
   const tgWebApp = useTelegramApp();
+  const registerHapticFeedback = useRegisterHapticFeedback();
 
   const createListMutation = useCreateListMutation({
     onSuccess: () => {
@@ -39,6 +42,7 @@ const CreateCollectionForm = ({ className }: Props) => {
     const userId = tgWebApp?.initDataUnsafe?.user?.id || 1;
 
     if (userId) {
+      registerHapticFeedback('soft');
       createListMutation.mutate({ name: data.name, userId });
     }
   };

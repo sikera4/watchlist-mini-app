@@ -11,6 +11,7 @@ import { SearchFormValues } from './types';
 import { movieToCardData } from './utilities/movieToCardData';
 import { formatGenres } from './utilities/formatGenres';
 import { tvShowToCardData } from './utilities/tvShowToCardData';
+import { useRegisterHapticFeedback } from '@/hooks/useRegisterHapticFeedback';
 
 type Props = {
   moviesGenresList: Genre[];
@@ -25,6 +26,8 @@ const ExplorePage = ({ moviesGenresList, tvShowsGenresList }: Props) => {
 
   const { register, handleSubmit: rhfHandleSubmit, reset } = useForm<SearchFormValues>();
 
+  const registerHapticFeedback = useRegisterHapticFeedback();
+
   const isScrolledToBottom = useIsScrolledToBottom(undefined, {
     offset: 200,
   });
@@ -33,6 +36,7 @@ const ExplorePage = ({ moviesGenresList, tvShowsGenresList }: Props) => {
 
   const handleSubmit = (data: SearchFormValues) => {
     setSearchTerm(data.searchInput);
+    registerHapticFeedback('soft');
   };
 
   useEffect(() => {
