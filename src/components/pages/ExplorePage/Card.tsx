@@ -1,6 +1,7 @@
 import { PLACEHOLDER_URL } from '@/constants';
 import { getImageSrcByPath } from '@/utilities/getImageSrcByPath';
 import { Image } from '@heroui/react';
+import NextImage from 'next/image';
 import { useState } from 'react';
 import CardOverlay from './CardOverlay';
 import { CardData } from './types';
@@ -19,6 +20,7 @@ const Card = ({ title, posterPath, genres, releaseDate, id }: Props) => {
           height={270}
           src={getImageSrcByPath(posterPath)}
           fallbackSrc={PLACEHOLDER_URL}
+          as={NextImage}
         />
       </div>
       <h4 className="text-lg font-bold mt-2">{title ?? name}</h4>

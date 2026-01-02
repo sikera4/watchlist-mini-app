@@ -45,6 +45,7 @@ const ListItem = ({ item, watchlistId }: Props) => {
           width={48}
           className="static object-cover rounded-md"
           fallbackSrc={PLACEHOLDER_URL}
+          as={NextImage}
         />
       </div>
       <div>
