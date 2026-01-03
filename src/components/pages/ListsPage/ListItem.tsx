@@ -3,7 +3,7 @@ import { PLACEHOLDER_URL } from '@/constants';
 import { formatYear } from '@/utilities/formatYear';
 import { getImageSrcByPath } from '@/utilities/getImageSrcByPath';
 import { addToast, Button, Image } from '@heroui/react';
-import { FaCircleCheck, FaEye } from 'react-icons/fa6';
+import { FaCircleCheck, FaRegCircleCheck } from 'react-icons/fa6';
 import NextImage from 'next/image';
 
 type Props = {
@@ -37,13 +37,12 @@ const ListItem = ({ item, watchlistId }: Props) => {
 
   return (
     <div className="flex relative gap-4 items-center">
-      <div className="rounded-md overflow-hidden">
+      <div className="relative rounded-md overflow-hidden h-18 w-12">
         <Image
           src={getImageSrcByPath(posterPath)}
           alt={`${title} poster`}
-          height={72}
-          width={48}
-          className="static object-cover rounded-md"
+          fill={true}
+          className="object-cover"
           fallbackSrc={PLACEHOLDER_URL}
           as={NextImage}
         />
@@ -55,7 +54,7 @@ const ListItem = ({ item, watchlistId }: Props) => {
       <div className="absolute right-0">
         {isSeen ? (
           <div className="size-10 flex justify-center items-center">
-            <FaCircleCheck className="size-6" />
+            <FaRegCircleCheck className="size-6" />
           </div>
         ) : (
           <Button
@@ -64,7 +63,7 @@ const ListItem = ({ item, watchlistId }: Props) => {
             onPress={handleMarkAsSeen}
             isLoading={markAsSeenMutation.isPending}
           >
-            <FaEye className="size-6" />
+            <FaCircleCheck className="size-6" />
           </Button>
         )}
       </div>

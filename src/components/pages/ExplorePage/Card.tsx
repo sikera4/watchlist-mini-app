@@ -13,13 +13,13 @@ const Card = ({ title, posterPath, genres, releaseDate, id }: Props) => {
 
   return (
     <div className="relative" onClick={() => setIsTapped(!isTapped)}>
-      <div className="rounded-md overflow-hidden">
+      <div className="rounded-md overflow-hidden relative h-[270px]">
         <Image
           alt={`${title} poster`}
-          className="static rounded-md object-cover"
-          height={270}
+          className="object-cover"
           src={getImageSrcByPath(posterPath)}
           fallbackSrc={PLACEHOLDER_URL}
+          fill={true}
           as={NextImage}
         />
       </div>
