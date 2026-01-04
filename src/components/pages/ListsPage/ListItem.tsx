@@ -37,16 +37,14 @@ const ListItem = ({ item, watchlistId }: Props) => {
 
   return (
     <div className="flex relative gap-4 items-center">
-      <div className="relative rounded-md overflow-hidden h-18 w-12">
-        <Image
-          src={getImageSrcByPath(posterPath)}
-          alt={`${title} poster`}
-          fill={true}
-          className="object-cover"
-          fallbackSrc={PLACEHOLDER_URL}
-          as={NextImage}
-        />
-      </div>
+      <Image
+        src={getImageSrcByPath(posterPath)}
+        alt={`${title} poster`}
+        fill={true}
+        classNames={{ wrapper: '!max-w-none w-12 h-18 relative', img: 'rounded-md cover' }}
+        fallbackSrc={PLACEHOLDER_URL}
+        as={NextImage}
+      />
       <div>
         <h4 className="text-lg font-bold">{title}</h4>
         {!!releaseDate && <span className="text-sm mt-1">{formatYear(new Date(releaseDate))}</span>}

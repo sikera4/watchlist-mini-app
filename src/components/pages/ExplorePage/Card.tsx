@@ -13,16 +13,18 @@ const Card = ({ title, posterPath, genres, releaseDate, id }: Props) => {
 
   return (
     <div className="relative" onClick={() => setIsTapped(!isTapped)}>
-      <div className="rounded-md overflow-hidden relative h-[270px]">
-        <Image
-          alt={`${title} poster`}
-          className="object-cover"
-          src={getImageSrcByPath(posterPath)}
-          fallbackSrc={PLACEHOLDER_URL}
-          fill={true}
-          as={NextImage}
-        />
-      </div>
+      <Image
+        alt={`${title} poster`}
+        className="object-cover"
+        classNames={{
+          wrapper: '!max-w-none relative z-0 h-[270px]',
+          img: 'object-cover border-md',
+        }}
+        src={getImageSrcByPath(posterPath)}
+        fallbackSrc={PLACEHOLDER_URL}
+        fill={true}
+        as={NextImage}
+      />
       <h4 className="text-lg font-bold mt-2">{title ?? name}</h4>
       <span className="text-sm font-light">
         {Boolean(releaseDate) && releaseDate}
