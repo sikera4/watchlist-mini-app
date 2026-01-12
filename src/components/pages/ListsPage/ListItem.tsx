@@ -36,20 +36,27 @@ const ListItem = ({ item, watchlistId }: Props) => {
   };
 
   return (
-    <div className="flex relative gap-4 items-center">
-      <Image
-        src={getImageSrcByPath(posterPath)}
-        alt={`${title} poster`}
-        fill={true}
-        classNames={{ wrapper: '!max-w-none w-12 h-18 relative', img: 'rounded-md cover' }}
-        fallbackSrc={PLACEHOLDER_URL}
-        as={NextImage}
-      />
-      <div>
-        <h4 className="text-lg font-bold">{title}</h4>
-        {!!releaseDate && <span className="text-sm mt-1">{formatYear(new Date(releaseDate))}</span>}
+    <div className="flex relative gap-4 items-center justify-between">
+      <div className="flex gap-4 items-center">
+        <Image
+          src={getImageSrcByPath(posterPath)}
+          alt={`${title} poster`}
+          fill={true}
+          classNames={{
+            wrapper: '!max-w-none min-w-12 w-12 h-18 relative',
+            img: 'rounded-md cover',
+          }}
+          fallbackSrc={PLACEHOLDER_URL}
+          as={NextImage}
+        />
+        <div>
+          <h4 className="text-lg font-bold">{title}</h4>
+          {!!releaseDate && (
+            <span className="text-sm mt-1">{formatYear(new Date(releaseDate))}</span>
+          )}
+        </div>
       </div>
-      <div className="absolute right-0">
+      <div>
         {isSeen ? (
           <div className="size-10 flex justify-center items-center">
             <FaRegCircleCheck className="size-6" />

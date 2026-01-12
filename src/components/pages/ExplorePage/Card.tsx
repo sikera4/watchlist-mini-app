@@ -31,6 +31,7 @@ const Card = ({ title, posterPath, genres, releaseDate, id }: Props) => {
         {Boolean(releaseDate && genres) && ', '}
         {genres}
       </span>
+
       <CardOverlay
         isVisible={isTapped}
         mediaItem={{

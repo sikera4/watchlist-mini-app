@@ -19,7 +19,7 @@ const CollectionsPage = () => {
         ) : (
           <div className="flex flex-col">
             {watchlists.length ? (
-              <Accordion>
+              <Accordion variant="shadow">
                 {watchlists.map((watchlist, i) => (
                   <AccordionItem key={i} title={watchlist.name}>
                     <ul className="list-none flex flex-col gap-2">
