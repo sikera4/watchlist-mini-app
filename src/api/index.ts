@@ -1,4 +1,5 @@
 export { useAddToWatchlistMutation } from './hooks/useAddToWatchlistMutation';
+export { useRemoveFromWatchlistMutation } from './hooks/useRemoveFromWatchlistMutation';
 export { useMoviesListQuery, MOVIES_LIST_INFINITE_QUERY_OPTIONS } from './hooks/useMoviesListQuery';
 export { useSearchQuery } from './hooks/useSearchQuery';
 export { useAddUserMutation } from './hooks/useAddUserMutation';

@@ -32,7 +32,7 @@ const AddToWatchlistItem = ({ watchlist, mediaItem }: Props) => {
 
     addToWatchlistMutation.mutate({
       watchlistId: watchlist.id,
-      movie: {
+      mediaItem: {
         id: mediaItem.id,
         title: mediaItem.title,
         posterPath: mediaItem.posterPath,

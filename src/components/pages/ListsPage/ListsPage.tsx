@@ -1,12 +1,56 @@
 'use client';
 
+import { useEffect, useState } from 'react';
+
+import AnimatedPresenceFacade from '@/components/ui/AnimatedPresenceFacade';
 import { useWatchlists } from '@/hooks/useWatchlists';
-import { Accordion, AccordionItem, Spinner } from '@heroui/react';
+import { Accordion, AccordionItem, Button, Spinner } from '@heroui/react';
+import { FaPenToSquare, FaRegTrashCan } from 'react-icons/fa6';
 import CreateListForm from './CreateListForm';
 import ListItem from './ListItem';
+import { useRemoveFromWatchlistMutation } from '@/api';
 
-const CollectionsPage = () => {
+const ListsPage = () => {
   const { watchlists, isLoading } = useWatchlists();
+
+  const [watchlistBeingEditedKey, setWatchlistsBeingEditedKey] = useState<string | null>(null);
+  const [selectedItemsIds, setSelectedItemsIds] = useState<number[]>([]);
+
+  const removeFromWatchlistMutation = useRemoveFromWatchlistMutation({
+    onSuccess: () => {
+      setSelectedItemsIds([]);
+      setWatchlistsBeingEditedKey(null);
+    },
+  });
+
+  const handleEditButtonClick = (watchlistId: string) => {
+    setWatchlistsBeingEditedKey((prev) => (prev === watchlistId ? null : watchlistId));
+    setSelectedItemsIds([]);
+  };
+
+  const handleSelectionChange = (itemId: number, isSelected: boolean) => {
+    if (isSelected) {
+      setSelectedItemsIds([...selectedItemsIds, itemId]);
+    } else {
+      setSelectedItemsIds(selectedItemsIds.filter((id) => id !== itemId));
+    }
+  };
+
+  const handleDeleteButtonClick = () => {
+    const watchlistBeingEdited = watchlists.find(
+      (watchlist) => watchlist.id === watchlistBeingEditedKey
+    );
+    const mediaItemsToDelete =
+      watchlistBeingEdited?.items.filter((mediaItem) => selectedItemsIds.includes(mediaItem.id)) ??
+      [];
+
+    if (watchlistBeingEditedKey) {
+      removeFromWatchlistMutation.mutate({
+        watchlistId: watchlistBeingEditedKey,
+        mediaItems: mediaItemsToDelete,
+      });
+    }
+  };
 
   return (
     <div className="p-4 min-h-screen relative">
@@ -20,19 +64,55 @@ const CollectionsPage = () => {
           <div className="flex flex-col">
             {watchlists.length ? (
               <Accordion variant="shadow">
-                {watchlists.map((watchlist, i) => (
-                  <AccordionItem key={i} title={watchlist.name}>
-                    <ul className="list-none flex flex-col gap-2">
-                      {watchlist.items.length ? (
-                        watchlist.items.map((item) => (
-                          <ListItem key={item.id} item={item} watchlistId={watchlist.id} />
-                        ))
-                      ) : (
-                        <span>Список пуст</span>
+                {watchlists.map((watchlist) => {
+                  const isEditMode = watchlistBeingEditedKey === watchlist.id;
+
+                  return (
+                    <AccordionItem key={watchlist.id} title={watchlist.name}>
+                      {Boolean(watchlist.items.length) && (
+                        <div className="flex gap-2 justify-end py-2">
+                          <AnimatedPresenceFacade isVisible={isEditMode}>
+                            <Button
+                              isIconOnly={true}
+                              size="sm"
+                              color="danger"
+                              isDisabled={!selectedItemsIds.length}
+                              isLoading={removeFromWatchlistMutation.isPending}
+                              onPress={handleDeleteButtonClick}
+                            >
+                              <FaRegTrashCan />
+                            </Button>
+                          </AnimatedPresenceFacade>
+                          <Button
+                            isIconOnly={true}
+                            size="sm"
+                            color={isEditMode ? 'primary' : 'default'}
+                            onPress={() => handleEditButtonClick(watchlist.id)}
+                          >
+                            <FaPenToSquare />
+                          </Button>
+                        </div>
                       )}
-                    </ul>
-                  </AccordionItem>
-                ))}
+                      <ul className="list-none flex flex-col gap-2">
+                        {watchlist.items.length ? (
+                          watchlist.items.map((item) => (
+                            <ListItem
+                              key={item.id}
+                              item={item}
+                              watchlistId={watchlist.id}
+                              isEditMode={isEditMode}
+                              onSelectionChange={(isSelected) =>
+                                handleSelectionChange(item.id, isSelected)
+                              }
+                            />
+                          ))
+                        ) : (
+                          <span>Список пуст</span>
+                        )}
+                      </ul>
+                    </AccordionItem>
+                  );
+                })}
               </Accordion>
             ) : (
               <span>Списков нет</span>
@@ -45,4 +125,4 @@ const CollectionsPage = () => {
   );
 };
 
-export default CollectionsPage;
+export default ListsPage;
