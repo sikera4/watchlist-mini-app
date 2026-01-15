@@ -7,6 +7,7 @@ import { getQueryClient } from '@/utilities/getQueryClient';
 import { dehydrate, HydrationBoundary } from '@tanstack/react-query';
 import ExplorePage from './ExplorePage';
 import { cacheLife } from 'next/cache';
+import { Suspense } from 'react';
 
 const ServerExplorePage = async () => {
   'use cache';
@@ -22,7 +23,9 @@ const ServerExplorePage = async () => {
 
   return (
     <HydrationBoundary state={dehydrate(queryClient)}>
-      <ExplorePage moviesGenresList={moviesGenresList} tvShowsGenresList={tvShowsGenresList} />
+      <Suspense>
+        <ExplorePage moviesGenresList={moviesGenresList} tvShowsGenresList={tvShowsGenresList} />
+      </Suspense>
     </HydrationBoundary>
   );
 };
