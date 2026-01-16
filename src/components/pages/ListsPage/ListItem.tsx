@@ -3,7 +3,7 @@ import { motion } from 'framer-motion';
 import { PLACEHOLDER_URL } from '@/constants';
 import { formatYear } from '@/utilities/formatYear';
 import { getImageSrcByPath } from '@/utilities/getImageSrcByPath';
-import { addToast, Button, Checkbox, Image } from '@heroui/react';
+import { addToast, Button, Checkbox, Chip, Image } from '@heroui/react';
 import { FaCircleCheck, FaRegCircleCheck } from 'react-icons/fa6';
 import NextImage from 'next/image';
 import AnimatedPresenceFacade from '@/components/ui/AnimatedPresenceFacade';
@@ -60,21 +60,16 @@ const ListItem = ({ item, watchlistId, isEditMode, onSelectionChange }: Props) =
           )}
         </div>
       </div>
-      <motion.div className="flex gap-2 items-center" animate={{ width: isEditMode ? 76 : 40 }}>
-        {isSeen ? (
-          <div className="size-10 flex justify-center items-center">
-            <FaRegCircleCheck className="size-6" />
-          </div>
-        ) : (
-          <Button
-            isIconOnly={true}
-            variant="faded"
-            onPress={handleMarkAsSeen}
-            isLoading={markAsSeenMutation.isPending}
-          >
-            <FaCircleCheck className="size-6" />
-          </Button>
-        )}
+      <motion.div className="flex gap-1 items-center" animate={{ width: isEditMode ? 76 : 40 }}>
+        <Button
+          isIconOnly={true}
+          variant={isSeen ? 'light' : 'faded'}
+          onPress={handleMarkAsSeen}
+          isLoading={markAsSeenMutation.isPending}
+          isDisabled={isSeen}
+        >
+          {isSeen ? <FaRegCircleCheck className="size-6" /> : <FaCircleCheck className="size-6" />}
+        </Button>
         <AnimatedPresenceFacade isVisible={isEditMode}>
           <Checkbox size="lg" color="default" onValueChange={onSelectionChange} />
         </AnimatedPresenceFacade>

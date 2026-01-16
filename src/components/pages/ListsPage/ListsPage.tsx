@@ -1,14 +1,14 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 
+import { useRemoveFromWatchlistMutation } from '@/api';
 import AnimatedPresenceFacade from '@/components/ui/AnimatedPresenceFacade';
 import { useWatchlists } from '@/hooks/useWatchlists';
 import { Accordion, AccordionItem, Button, Spinner } from '@heroui/react';
 import { FaPenToSquare, FaRegTrashCan } from 'react-icons/fa6';
 import CreateListForm from './CreateListForm';
 import ListItem from './ListItem';
-import { useRemoveFromWatchlistMutation } from '@/api';
 
 const ListsPage = () => {
   const { watchlists, isLoading } = useWatchlists();

@@ -11,7 +11,7 @@ import { Suspense } from 'react';
 
 const ServerExplorePage = async () => {
   'use cache';
-  cacheLife('hours');
+  cacheLife('days');
 
   const queryClient = getQueryClient();
 
