@@ -11,6 +11,7 @@ export type TvShow = {
   name: string;
   poster_path: string;
   genre_ids: number[];
+  first_air_date?: string;
 }
 
 export type MediaItem = {

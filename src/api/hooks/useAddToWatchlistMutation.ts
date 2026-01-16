@@ -12,6 +12,8 @@ type Params = {
 const addToWatchlistMutation = async ({ mediaItem, watchlistId }: Params) => {
   const watchlistDocRef = doc(db, 'watchlists', String(watchlistId));
 
+  console.log(mediaItem)
+
   await updateDoc(watchlistDocRef, {
     items: arrayUnion(mediaItem),
   })
