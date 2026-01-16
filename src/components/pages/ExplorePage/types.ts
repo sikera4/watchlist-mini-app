@@ -8,4 +8,6 @@ export type CardData = {
   posterPath: string;
   genres?: string;
   releaseDate?: string;
+  originalTitle: string;
+  overview: string;
 }

@@ -7,6 +7,8 @@ export const movieToCardData = (movie: Movie): CardData => {
     title: movie.title,
     posterPath: movie.poster_path,
     releaseDate: movie.release_date ? formatYear(new Date(movie.release_date)) : '',
+    originalTitle: movie.original_title,
+    overview: movie.overview,
     id: movie.id,
   }
 }

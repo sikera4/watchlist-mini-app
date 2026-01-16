@@ -8,7 +8,7 @@ import { CardData } from './types';
 
 type Props = CardData;
 
-const Card = ({ title, posterPath, genres, releaseDate, id }: Props) => {
+const Card = ({ title, posterPath, genres, releaseDate, id, originalTitle, overview }: Props) => {
   const [isTapped, setIsTapped] = useState(false);
 
   return (
@@ -40,6 +40,8 @@ const Card = ({ title, posterPath, genres, releaseDate, id }: Props) => {
           genres,
           releaseDate,
           id,
+          originalTitle,
+          overview,
         }}
       />
     </div>

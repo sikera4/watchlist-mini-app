@@ -3,6 +3,8 @@ export type Movie = {
   poster_path: string;
   release_date?: string;
   genre_ids: number[];
+  original_title: string;
+  overview: string;
   id: number;
 };
 
@@ -11,6 +13,8 @@ export type TvShow = {
   name: string;
   poster_path: string;
   genre_ids: number[];
+  original_name: string;
+  overview: string;
   first_air_date?: string;
 }
 
