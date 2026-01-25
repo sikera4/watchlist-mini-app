@@ -1,6 +1,4 @@
-'use client';
-
-import { Skeleton } from '@heroui/react';
+import Skeleton from '@/components/ui/Skeleton';
 
 const cardsIds = [0, 1, 2, 3];
 
