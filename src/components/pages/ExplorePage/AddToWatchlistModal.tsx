@@ -27,7 +27,9 @@ const AddToWatchlistModal = ({ mediaItem }: Props) => {
 
   return (
     <>
-      <Button onPress={onOpenChange}>{t('addToWatchlist')}</Button>
+      <Button onPress={onOpenChange} isDisabled={!watchlists.length}>
+        {t('addToWatchlist')}
+      </Button>
       <Modal isOpen={isOpen} onOpenChange={onOpenChange}>
         <ModalContent>
           <ModalHeader>{t('addToWatchlist')}</ModalHeader>
