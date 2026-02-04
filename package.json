@@ -8,7 +8,9 @@
     "build": "next build",
     "start": "next start",
     "lint": "eslint",
-    "lint:prettier": "prettier --write 'src/**/*.{js,jsx,ts,tsx,scss}'"
+    "lint:prettier": "prettier --write 'src/**/*.{ts,tsx}'",
+    "prepare": "husky",
+    "husky:precommit": "lint-staged"
   },
   "dependencies": {
     "@heroui/react": "2.8.5",
@@ -32,6 +34,8 @@
     "babel-plugin-react-compiler": "1.0.0",
     "eslint": "9",
     "eslint-config-next": "16.0.1",
+    "husky": "9.1.7",
+    "lint-staged": "16.2.7",
     "prettier": "3.6.2",
     "tailwindcss": "4",
     "typescript": "5"
