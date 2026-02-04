@@ -25,7 +25,7 @@ const Navigation = () => {
   };
 
   return (
-    <nav className="pb-4 fixed bottom-0 left-0 right-0 flex justify-center pointer-events-none">
+    <nav className="pb-4 fixed bottom-0 left-0 right-0 flex justify-center pointer-events-none z-50">
       <Tabs
         selectedKey={pathname}
         className="pointer-events-auto"

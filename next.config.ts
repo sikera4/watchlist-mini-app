@@ -8,6 +8,7 @@ const nextConfig: NextConfig = {
 
   experimental: {
     optimizePackageImports: ["@chakra-ui/react"],
+    viewTransition: true,
   },
 
   rewrites: async () => {

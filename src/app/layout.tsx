@@ -6,6 +6,7 @@ import { NextIntlClientProvider } from 'next-intl';
 import { Noto_Sans_Display } from 'next/font/google';
 import Script from 'next/script';
 import './globals.css';
+import { ViewTransition } from 'react';
 
 const font = Noto_Sans_Display({
   subsets: ['latin', 'cyrillic'],
@@ -30,8 +31,10 @@ export default async function RootLayout({
         <ReactQueryProvider>
           <NextIntlClientProvider>
             <Providers>
-              {children}
-              <Navigation />
+              <ViewTransition name="page-content">
+                {children}
+                <Navigation />
+              </ViewTransition>
             </Providers>
           </NextIntlClientProvider>
         </ReactQueryProvider>
