@@ -1,5 +1,5 @@
-import { useUserDataQuery, useWatchlistsQuery } from "@/api";
-import { useTelegramApp } from "@/components/providers/TelegramAppProvider";
+import { useUserDataQuery, useWatchlistsQuery } from '@/api';
+import { useTelegramApp } from '@/components/providers/TelegramAppProvider';
 
 export const useWatchlists = () => {
   const tgWebApp = useTelegramApp();
@@ -17,5 +17,5 @@ export const useWatchlists = () => {
   return {
     watchlists: watchlistsQuery.data ?? [],
     isLoading: userDataQuery.isLoading || watchlistsQuery.isLoading,
-  }
-}
+  };
+};

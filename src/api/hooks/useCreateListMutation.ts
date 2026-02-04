@@ -37,6 +37,6 @@ export const useCreateListMutation = (options?: UseMutationOptions<unknown, unkn
       await queryClient.invalidateQueries({ queryKey: getWatchlistsQueryKey() });
 
       options?.onSuccess?.(_, variables, ...otherParams);
-    }
+    },
   });
 };

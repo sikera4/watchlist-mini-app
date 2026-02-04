@@ -1,4 +1,4 @@
-import { QueryKey, UseQueryOptions } from "@tanstack/react-query";
+import { QueryKey, UseQueryOptions } from '@tanstack/react-query';
 
 export type UseQueryOptionsWithoutQueryKeyAndFn<
   TQueryFnData = unknown,

@@ -10,4 +10,4 @@ export type CardData = {
   releaseDate?: string;
   originalTitle: string;
   overview: string;
-}
+};

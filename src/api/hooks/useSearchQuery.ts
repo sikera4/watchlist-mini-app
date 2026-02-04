@@ -3,13 +3,16 @@ import { Movie, TvShow } from '../types';
 import { useInfiniteQuery } from '@tanstack/react-query';
 import { TMDB_LANGUAGE } from '../constants';
 
-type MediaItem = {
-  media_type: 'movie';
-} & Movie | {
-  media_type: 'tv';
-} & TvShow | {
-  media_type: 'person';
-};
+type MediaItem =
+  | ({
+      media_type: 'movie';
+    } & Movie)
+  | ({
+      media_type: 'tv';
+    } & TvShow)
+  | {
+      media_type: 'person';
+    };
 
 const search = async ({
   pageParam,
@@ -21,7 +24,9 @@ const search = async ({
   data: MediaItem[];
   nextCursor?: number;
 }> => {
-  const response = await fetchWithAuth(`/_api/search/multi?page=${pageParam}&query=${queryKey[1]}&language=${TMDB_LANGUAGE}`);
+  const response = await fetchWithAuth(
+    `/_api/search/multi?page=${pageParam}&query=${queryKey[1]}&language=${TMDB_LANGUAGE}`
+  );
 
   return {
     data: response.results,

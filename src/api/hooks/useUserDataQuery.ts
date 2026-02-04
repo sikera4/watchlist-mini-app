@@ -25,7 +25,12 @@ const getUserData = async (userId: number | null): Promise<User | null> => {
 
 export const useUserDataQuery = (
   userId: number | null,
-  options?: UseQueryOptionsWithoutQueryKeyAndFn<User | null, unknown, User | null, (string | number | null)[]>
+  options?: UseQueryOptionsWithoutQueryKeyAndFn<
+    User | null,
+    unknown,
+    User | null,
+    (string | number | null)[]
+  >
 ) => {
   return useQuery({
     ...options,

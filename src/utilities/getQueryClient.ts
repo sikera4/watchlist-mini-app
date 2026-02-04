@@ -1,17 +1,17 @@
-import { isServer, QueryClient } from "@tanstack/react-query"
+import { isServer, QueryClient } from '@tanstack/react-query';
 
 const makeQueryClient = () => {
   return new QueryClient({
-      defaultOptions: {
-        queries: {
-          retry: 2,
-          refetchOnMount: false,
-          refetchOnWindowFocus: false,
-          staleTime: 1000 * 60, // 1 minute
-        },
+    defaultOptions: {
+      queries: {
+        retry: 2,
+        refetchOnMount: false,
+        refetchOnWindowFocus: false,
+        staleTime: 1000 * 60, // 1 minute
       },
-  })
-}
+    },
+  });
+};
 
 let browserQueryClient: QueryClient;
 
@@ -25,4 +25,4 @@ export const getQueryClient = () => {
   }
 
   return browserQueryClient;
-}
+};

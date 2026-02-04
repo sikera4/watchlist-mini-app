@@ -11,7 +11,9 @@ const getMoviesList = async ({
   data: Movie[];
   nextCursor?: number;
 }> => {
-  const response = await fetchWithAuth(`${isServer ? TMDB_BASE_URL : '/_api'}/movie/popular?language=${TMDB_LANGUAGE}&page=${pageParam}`);
+  const response = await fetchWithAuth(
+    `${isServer ? TMDB_BASE_URL : '/_api'}/movie/popular?language=${TMDB_LANGUAGE}&page=${pageParam}`
+  );
 
   return {
     data: response.results,
@@ -24,7 +26,7 @@ export const MOVIES_LIST_INFINITE_QUERY_OPTIONS = {
   queryFn: getMoviesList,
   initialPageParam: 1,
   getNextPageParam: (lastPage: { nextCursor?: number }) => lastPage.nextCursor,
-}
+};
 
 export const useMoviesListQuery = () => {
   return useInfiniteQuery(MOVIES_LIST_INFINITE_QUERY_OPTIONS);

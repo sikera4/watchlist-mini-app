@@ -1,9 +1,9 @@
-import { Genre } from "@/api";
+import { Genre } from '@/api';
 
 type Params = {
   genresIds: number[];
   genres: Genre[];
-}
+};
 
 export const formatGenres = ({ genres, genresIds }: Params): string => {
   return genres.length
@@ -15,4 +15,4 @@ export const formatGenres = ({ genres, genresIds }: Params): string => {
         })
         .join(', ')
     : '';
-}
+};

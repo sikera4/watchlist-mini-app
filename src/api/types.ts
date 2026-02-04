@@ -16,7 +16,7 @@ export type TvShow = {
   original_name: string;
   overview: string;
   first_air_date?: string;
-}
+};
 
 export type MediaItem = {
   id: number;
@@ -24,7 +24,7 @@ export type MediaItem = {
   releaseDate?: string;
   posterPath: string;
   isSeen: boolean;
-}
+};
 
 export type List = {
   id: string;

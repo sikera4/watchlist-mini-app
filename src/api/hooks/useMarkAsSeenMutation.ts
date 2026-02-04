@@ -1,18 +1,15 @@
-import { db } from "@/utilities/initializeFirebase";
-import { useMutation, UseMutationOptions, useQueryClient } from "@tanstack/react-query";
-import { doc, getDoc, updateDoc } from "firebase/firestore";
-import { MediaItem } from "../types";
-import { getWatchlistsQueryKey } from "./useWatchlistsQuery";
+import { db } from '@/utilities/initializeFirebase';
+import { useMutation, UseMutationOptions, useQueryClient } from '@tanstack/react-query';
+import { doc, getDoc, updateDoc } from 'firebase/firestore';
+import { MediaItem } from '../types';
+import { getWatchlistsQueryKey } from './useWatchlistsQuery';
 
 type Params = {
   watchlistId: string;
   movieId: number;
-}
+};
 
-const markAsSeen = async ({
-  watchlistId,
-  movieId,
-}: Params) => {
+const markAsSeen = async ({ watchlistId, movieId }: Params) => {
   const watchlistDocRef = doc(db, 'watchlists', String(watchlistId));
 
   const watchlistDoc = await getDoc(watchlistDocRef);
@@ -39,12 +36,12 @@ const markAsSeen = async ({
     }
 
     moviesToWatchList.push(movie);
-  })
+  });
 
   await updateDoc(watchlistDocRef, {
     items: [...watchedMoviesList, ...moviesToWatchList],
-  })
-}
+  });
+};
 
 export const useMarkAsSeenMutation = (options?: UseMutationOptions<unknown, unknown, Params>) => {
   const queryClient = useQueryClient();
@@ -55,7 +52,7 @@ export const useMarkAsSeenMutation = (options?: UseMutationOptions<unknown, unkn
     onSuccess: (...params) => {
       options?.onSuccess?.(...params);
 
-      queryClient.invalidateQueries({ queryKey: getWatchlistsQueryKey() })
-    }
-  })
-}
+      queryClient.invalidateQueries({ queryKey: getWatchlistsQueryKey() });
+    },
+  });
+};

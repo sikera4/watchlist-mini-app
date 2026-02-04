@@ -1,6 +1,6 @@
-import { Movie } from "@/api";
-import { CardData } from "../types";
-import { formatYear } from "@/utilities/formatYear";
+import { Movie } from '@/api';
+import { CardData } from '../types';
+import { formatYear } from '@/utilities/formatYear';
 
 export const movieToCardData = (movie: Movie): CardData => {
   return {
@@ -10,5 +10,5 @@ export const movieToCardData = (movie: Movie): CardData => {
     originalTitle: movie.original_title,
     overview: movie.overview,
     id: movie.id,
-  }
-}
+  };
+};

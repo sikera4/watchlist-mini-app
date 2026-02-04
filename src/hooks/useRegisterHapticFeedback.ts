@@ -1,4 +1,4 @@
-import { useTelegramApp } from "@/components/providers/TelegramAppProvider"
+import { useTelegramApp } from '@/components/providers/TelegramAppProvider';
 
 type HapticFeedbackType = 'light' | 'medium' | 'heavy' | 'rigid' | 'soft';
 
@@ -7,6 +7,6 @@ export const useRegisterHapticFeedback = () => {
 
   const registerHapticFeedback = (type: HapticFeedbackType) => {
     tgWebApp?.HapticFeedback?.impactOccurred(type);
-  }
+  };
   return registerHapticFeedback;
-}
+};
