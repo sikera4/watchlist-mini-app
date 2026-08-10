@@ -1,6 +1,6 @@
 'use client';
 
-import { ReactNode } from 'react';
+import { ReactNode, useEffect } from 'react';
 import { useTelegramApp } from './TelegramAppProvider';
 
 type Props = {
@@ -10,11 +10,29 @@ type Props = {
 const ThemeProvider = ({ children }: Props) => {
   const tgWebApp = useTelegramApp();
 
-  return (
-    <main className={`${tgWebApp?.colorScheme ?? 'dark'} bg-background text-foreground`}>
-      {children}
-    </main>
-  );
+  useEffect(() => {
+    if (!tgWebApp) {
+      return;
+    }
+
+    const applyTheme = () => {
+      const root = document.documentElement;
+      const isDark = tgWebApp.colorScheme === 'dark';
+
+      root.classList.toggle('dark', isDark);
+      root.dataset.theme = tgWebApp.colorScheme;
+      root.style.colorScheme = tgWebApp.colorScheme;
+    };
+
+    applyTheme();
+    tgWebApp.onEvent('themeChanged', applyTheme);
+
+    return () => {
+      tgWebApp.offEvent('themeChanged', applyTheme);
+    };
+  }, [tgWebApp]);
+
+  return <main className="telegram-theme-surface min-h-screen">{children}</main>;
 };
 
 export default ThemeProvider;
