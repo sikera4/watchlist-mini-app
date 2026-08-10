@@ -1,4 +1,19 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Watchlist Mini App
+
+A Telegram Mini App for discovering movies and TV shows and organizing them into personal watchlists. It uses TMDB for media metadata and Firebase for user and watchlist storage.
+
+## Authentication
+
+The app authenticates users silently with their Telegram Mini App session:
+
+1. The client sends the raw `Telegram.WebApp.initData` value to `POST /api/auth/telegram`.
+2. The server validates Telegram's signature and the age of the payload.
+3. The server creates a Firebase custom token for the verified Telegram user ID.
+4. The client signs in to Firebase and uses that identity for Firestore access.
+
+There is no second login screen. The app intentionally refuses to load outside Telegram rather than falling back to a shared development user.
+
+Copy `.env.example` to `.env.local` and configure the Telegram bot and Firebase Admin credentials before starting the app. Do not expose `TELEGRAM_BOT_TOKEN` or Firebase Admin credentials through `NEXT_PUBLIC_*` variables.
 
 ## Getting Started
 
@@ -14,7 +29,7 @@ pnpm dev
 bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+The authenticated application must be opened as a Telegram Mini App. A normal browser visit displays an "open through Telegram" message because it has no signed Telegram launch data.
 
 You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
 

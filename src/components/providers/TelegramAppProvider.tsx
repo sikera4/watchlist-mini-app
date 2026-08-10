@@ -1,14 +1,19 @@
 'use client';
 
-import { useAddUserMutation } from '@/api';
-import { checkIfUserExists } from '@/utilities/checkIfUserExists';
+import { auth } from '@/utilities/initializeFirebase';
+import { browserSessionPersistence, setPersistence, signInWithCustomToken } from 'firebase/auth';
 import { createContext, ReactNode, useContext, useEffect, useState } from 'react';
 import { WebApp } from 'telegram-web-app';
 
 const TelegramAppContext = createContext<WebApp | null>(null);
+const AuthenticatedUserIdContext = createContext<string | null>(null);
 
 const useTelegramApp = () => {
   return useContext(TelegramAppContext);
+};
+
+const useAuthenticatedUserId = () => {
+  return useContext(AuthenticatedUserIdContext);
 };
 
 type Params = {
@@ -17,45 +22,100 @@ type Params = {
 
 const TelegramAppProvider = ({ children }: Params) => {
   const [tgWebApp, setTgWebApp] = useState<WebApp | null>(null);
-
-  const addUserMutation = useAddUserMutation();
+  const [authenticatedUserId, setAuthenticatedUserId] = useState<string | null>(null);
+  const [status, setStatus] = useState<'loading' | 'authenticated' | 'outside-telegram' | 'error'>(
+    'loading'
+  );
 
   useEffect(() => {
-    const tgWebApp: WebApp | null =
-      typeof window !== 'undefined' ? (window.Telegram?.WebApp ?? null) : null;
+    let isCancelled = false;
 
-    if (!tgWebApp) {
-      console.log('Telegram Web App is not available');
-      return;
-    }
+    const authenticate = async () => {
+      await Promise.resolve();
 
-    tgWebApp.ready();
-    tgWebApp.expand();
+      const webApp = window.Telegram?.WebApp ?? null;
 
-    setTgWebApp(tgWebApp);
-
-    const addUserToFireBase = async () => {
-      const userId = tgWebApp?.initDataUnsafe?.user?.id;
-
-      if (!userId) {
+      if (!webApp?.initData) {
+        if (!isCancelled) {
+          setStatus('outside-telegram');
+        }
         return;
       }
 
-      const userExists = await checkIfUserExists(userId);
+      webApp.ready();
+      webApp.expand();
 
-      if (!userExists) {
-        addUserMutation.mutate({
-          userId,
+      if (!isCancelled) {
+        setTgWebApp(webApp);
+      }
+
+      try {
+        const response = await fetch('/api/auth/telegram', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({ initData: webApp.initData }),
         });
+
+        if (!response.ok) {
+          throw new Error(`Telegram authentication failed with status ${response.status}`);
+        }
+
+        const data = (await response.json()) as { firebaseToken: string };
+
+        await setPersistence(auth, browserSessionPersistence);
+        const credential = await signInWithCustomToken(auth, data.firebaseToken);
+
+        if (!isCancelled) {
+          setAuthenticatedUserId(credential.user.uid);
+          setStatus('authenticated');
+        }
+      } catch (error) {
+        console.error('Unable to authenticate with Telegram', error);
+
+        if (!isCancelled) {
+          setStatus('error');
+        }
       }
     };
 
-    addUserToFireBase();
+    void authenticate();
+
+    return () => {
+      isCancelled = true;
+    };
   }, []);
 
-  return <TelegramAppContext.Provider value={tgWebApp}>{children}</TelegramAppContext.Provider>;
+  let content: ReactNode;
+
+  if (status === 'outside-telegram') {
+    content = (
+      <div className="min-h-screen p-6 flex items-center justify-center text-center">
+        Откройте приложение через Telegram-бота.
+      </div>
+    );
+  } else if (status === 'error') {
+    content = (
+      <div className="min-h-screen p-6 flex items-center justify-center text-center">
+        Не удалось подтвердить сессию Telegram. Закройте и снова откройте приложение.
+      </div>
+    );
+  } else if (status === 'loading') {
+    content = <div className="min-h-screen p-6 flex items-center justify-center">Загрузка…</div>;
+  } else {
+    content = children;
+  }
+
+  return (
+    <TelegramAppContext.Provider value={tgWebApp}>
+      <AuthenticatedUserIdContext.Provider value={authenticatedUserId}>
+        {content}
+      </AuthenticatedUserIdContext.Provider>
+    </TelegramAppContext.Provider>
+  );
 };
 
 export default TelegramAppProvider;
 
-export { useTelegramApp };
+export { useAuthenticatedUserId, useTelegramApp };

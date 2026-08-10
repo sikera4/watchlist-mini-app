@@ -4,9 +4,9 @@ import { useQuery } from '@tanstack/react-query';
 import { doc, getDoc } from 'firebase/firestore';
 import { User } from '../types';
 
-export const getUserDataQueryKey = (userId: number | null) => ['user', userId];
+export const getUserDataQueryKey = (userId: string | null) => ['user', userId];
 
-const getUserData = async (userId: number | null): Promise<User | null> => {
+const getUserData = async (userId: string | null): Promise<User | null> => {
   if (!userId) {
     return null;
   }
@@ -24,12 +24,12 @@ const getUserData = async (userId: number | null): Promise<User | null> => {
 };
 
 export const useUserDataQuery = (
-  userId: number | null,
+  userId: string | null,
   options?: UseQueryOptionsWithoutQueryKeyAndFn<
     User | null,
     unknown,
     User | null,
-    (string | number | null)[]
+    (string | null)[]
   >
 ) => {
   return useQuery({

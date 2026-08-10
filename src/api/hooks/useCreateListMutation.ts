@@ -6,7 +6,7 @@ import { getWatchlistsQueryKey } from './useWatchlistsQuery';
 
 type Params = {
   name?: string;
-  userId: number;
+  userId: string;
 };
 
 const createList = async (params: Params) => {

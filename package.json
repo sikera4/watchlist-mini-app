@@ -8,6 +8,7 @@
     "build": "next build",
     "start": "next start",
     "lint": "eslint",
+    "typecheck": "tsc --noEmit",
     "lint:prettier": "prettier --write 'src/**/*.{ts,tsx}'",
     "prepare": "husky",
     "husky:precommit": "lint-staged"
@@ -16,6 +17,7 @@
     "@heroui/react": "2.8.5",
     "@tanstack/react-query": "5.90.7",
     "firebase": "12.6.0",
+    "firebase-admin": "13.10.0",
     "framer-motion": "12.23.24",
     "next": "16.0.10",
     "next-intl": "4.4.0",
