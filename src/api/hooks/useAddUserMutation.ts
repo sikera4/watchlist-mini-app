@@ -3,7 +3,7 @@ import { useMutation } from '@tanstack/react-query';
 import { collection, doc, setDoc } from 'firebase/firestore';
 
 type Params = {
-  userId: number;
+  userId: string;
 };
 
 const addUser = async ({ userId }: Params) => {

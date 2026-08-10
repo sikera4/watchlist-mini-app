@@ -29,12 +29,12 @@ export type MediaItem = {
 export type List = {
   id: string;
   name?: string;
-  usersIds: number[];
+  userIds: string[];
   items: MediaItem[];
 };
 
 export type User = {
-  userId: number;
+  userId: string;
   watchlists: string[];
 };
 
