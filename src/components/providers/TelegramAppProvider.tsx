@@ -1,6 +1,7 @@
 'use client';
 
 import { auth } from '@/utilities/initializeFirebase';
+import AuthenticationScreen from '@/components/ui/AuthenticationScreen';
 import { browserSessionPersistence, setPersistence, signInWithCustomToken } from 'firebase/auth';
 import { createContext, ReactNode, useContext, useEffect, useState } from 'react';
 import { WebApp } from 'telegram-web-app';
@@ -90,19 +91,11 @@ const TelegramAppProvider = ({ children }: Params) => {
   let content: ReactNode;
 
   if (status === 'outside-telegram') {
-    content = (
-      <div className="min-h-screen p-6 flex items-center justify-center text-center">
-        Откройте приложение через Telegram-бота.
-      </div>
-    );
+    content = <AuthenticationScreen state="outside-telegram" />;
   } else if (status === 'error') {
-    content = (
-      <div className="min-h-screen p-6 flex items-center justify-center text-center">
-        Не удалось подтвердить сессию Telegram. Закройте и снова откройте приложение.
-      </div>
-    );
+    content = <AuthenticationScreen state="error" />;
   } else if (status === 'loading') {
-    content = <div className="min-h-screen p-6 flex items-center justify-center">Загрузка…</div>;
+    content = <AuthenticationScreen state="loading" />;
   } else {
     content = children;
   }

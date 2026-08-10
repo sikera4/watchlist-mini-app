@@ -11,12 +11,12 @@ type Props = {
 
 const ClientProviders = ({ children }: Props) => {
   return (
-    <TelegramAppProvider>
-      <HeroUIProvider>
+    <HeroUIProvider>
+      <TelegramAppProvider>
         <ThemeProvider>{children}</ThemeProvider>
         <ToastProvider placement="top-center" />
-      </HeroUIProvider>
-    </TelegramAppProvider>
+      </TelegramAppProvider>
+    </HeroUIProvider>
   );
 };
 
