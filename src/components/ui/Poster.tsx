@@ -12,7 +12,7 @@ export default function Poster({ path, title, className = '', sizes = '160px' }:
   const hasImage = Boolean(path) && path !== failedPath;
 
   return (
-    <div className={`relative overflow-hidden bg-surface-secondary ${className}`}>
+    <span className={`relative block overflow-hidden bg-surface-secondary ${className}`}>
       {hasImage ? (
         <NextImage
           src={getImageSrcByPath(path!)}
@@ -23,14 +23,14 @@ export default function Poster({ path, title, className = '', sizes = '160px' }:
           onError={() => setFailedPath(path!)}
         />
       ) : (
-        <div
+        <span
           role="img"
           aria-label={`Нет постера: ${title}`}
           className="flex h-full min-h-12 items-center justify-center text-muted"
         >
           <FaFilm aria-hidden="true" className="size-6" />
-        </div>
+        </span>
       )}
-    </div>
+    </span>
   );
 }

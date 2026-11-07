@@ -1,3 +1,3 @@
 export type CreateListFormValues = {
-  name?: string;
+  name: string;
 };

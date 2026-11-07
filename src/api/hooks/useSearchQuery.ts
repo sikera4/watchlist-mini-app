@@ -25,7 +25,7 @@ const search = async ({
   nextCursor?: number;
 }> => {
   const response = await fetchWithAuth(
-    `/_api/search/multi?page=${pageParam}&query=${queryKey[1]}&language=${TMDB_LANGUAGE}`
+    `/_api/search/multi?page=${pageParam}&query=${encodeURIComponent(queryKey[1])}&language=${TMDB_LANGUAGE}`
   );
 
   return {

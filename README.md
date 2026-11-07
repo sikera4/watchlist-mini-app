@@ -35,6 +35,23 @@ bun dev
 
 The authenticated application must be opened as a Telegram Mini App. A normal browser visit displays an "open through Telegram" message because it has no signed Telegram launch data.
 
+## UI development and checks
+
+Run `pnpm preview:ui` to view the Lists page with disposable, in-memory sample data at `http://127.0.0.1:4173`. Add `?mobile=1&theme=dark` or `?mobile=1&theme=light` for a phone-width preview, or `?empty=1` for the empty state.
+
+The preview uses separate Vite aliases for data, navigation, and images. It cannot access Firebase or authenticate real users, and these aliases are not part of the Next.js production build. Reloading resets the sample data. It verifies component interactions, not Telegram login or Next.js route transitions.
+
+Before reviewing changes, run:
+
+```bash
+pnpm test:ui
+pnpm typecheck
+pnpm lint
+pnpm build
+```
+
+In the deployed Telegram preview, also check cold startup, Lists → Explore → Lists navigation, preserved search and scroll position, and list creation, watched status, and item removal. Check light and dark themes. Production deployment remains merge-to-main only; do not promote feature previews manually.
+
 You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
 
 This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.

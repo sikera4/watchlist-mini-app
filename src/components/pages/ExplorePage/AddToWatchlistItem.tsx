@@ -18,6 +18,10 @@ const AddToWatchlistItem = ({ watchlist, mediaItem }: Props) => {
   const t = useTranslations('ListPage');
 
   const addToWatchlistMutation = useAddToWatchlistMutation({
+    onSuccess: () => {
+      setIsAdded(true);
+      toast.success(t('added'), { timeout: 2000 });
+    },
     onError: () => {
       setIsAdded(false);
       toast.danger('Ошибка добавления фильма.');
@@ -25,8 +29,6 @@ const AddToWatchlistItem = ({ watchlist, mediaItem }: Props) => {
   });
 
   const handleAddMovieClick = (watchlist: List) => {
-    setIsAdded(true);
-
     addToWatchlistMutation.mutate({
       watchlistId: watchlist.id,
       mediaItem: {
@@ -37,8 +39,6 @@ const AddToWatchlistItem = ({ watchlist, mediaItem }: Props) => {
         isSeen: false,
       },
     });
-
-    toast.success(t('added'), { timeout: 2000 });
   };
 
   return (
@@ -47,7 +47,12 @@ const AddToWatchlistItem = ({ watchlist, mediaItem }: Props) => {
       {isAdded ? (
         <Button isDisabled={true}>{t('added')}</Button>
       ) : (
-        <Button onPress={() => handleAddMovieClick(watchlist)}>{t('add')}</Button>
+        <Button
+          isPending={addToWatchlistMutation.isPending}
+          onPress={() => handleAddMovieClick(watchlist)}
+        >
+          {addToWatchlistMutation.isPending ? 'Добавляем…' : t('add')}
+        </Button>
       )}
     </div>
   );

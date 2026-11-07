@@ -42,6 +42,8 @@ const ExplorePage = ({ moviesGenresList, tvShowsGenresList }: Props) => {
   });
 
   const t = useTranslations('ListPage');
+  const activeQuery = searchTerm ? searchQuery : moviesListQuery;
+  const { hasNextPage, isFetchingNextPage, fetchNextPage } = activeQuery;
 
   const handleSubmit = (data: SearchFormValues) => {
     setSearchTerm(data.searchInput);
@@ -49,20 +51,17 @@ const ExplorePage = ({ moviesGenresList, tvShowsGenresList }: Props) => {
   };
 
   useEffect(() => {
-    if (!isScrolledToBottom) {
+    if (!isScrolledToBottom || !hasNextPage || isFetchingNextPage) {
       return;
     }
 
-    if (!searchTerm && moviesListQuery.hasNextPage) {
-      moviesListQuery.fetchNextPage();
+    // Recheck geometry after results grow; don't fetch every page on a stale scroll flag.
+    if (document.documentElement.scrollHeight - (window.scrollY + window.innerHeight) <= 200) {
+      void fetchNextPage();
     }
+  }, [isScrolledToBottom, hasNextPage, isFetchingNextPage, fetchNextPage]);
 
-    if (searchTerm && searchQuery.hasNextPage) {
-      searchQuery.fetchNextPage();
-    }
-  }, [isScrolledToBottom]);
-
-  const isLoading = moviesListQuery.isLoading || searchQuery.isLoading;
+  const isLoading = activeQuery.isLoading;
 
   const handleResetSearchFormButtonClick = () => {
     setSearchTerm('');
@@ -154,6 +153,34 @@ const ExplorePage = ({ moviesGenresList, tvShowsGenresList }: Props) => {
       ) : (
         <div className="grid grid-cols-2 gap-4">
           {searchTerm ? renderSearchedItems() : renderMoviesList()}
+        </div>
+      )}
+      {activeQuery.isError && (
+        <div role="alert" className="py-6 text-center">
+          <p className="mb-3 text-sm text-muted">
+            Не удалось загрузить фильмы. Попробуйте ещё раз.
+          </p>
+          <Button variant="secondary" onPress={() => void activeQuery.refetch()}>
+            Повторить
+          </Button>
+        </div>
+      )}
+      {!isLoading &&
+        !activeQuery.isError &&
+        activeQuery.data?.pages.every((page) => page.data.length === 0) && (
+          <p className="py-10 text-center text-muted">
+            Ничего не найдено. Попробуйте другое название.
+          </p>
+        )}
+      {hasNextPage && (
+        <div className="flex justify-center py-6">
+          <Button
+            variant="secondary"
+            isPending={isFetchingNextPage}
+            onPress={() => void fetchNextPage()}
+          >
+            {isFetchingNextPage ? 'Загружаем…' : 'Показать ещё'}
+          </Button>
         </div>
       )}
     </div>
