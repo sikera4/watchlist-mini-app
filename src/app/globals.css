@@ -37,7 +37,7 @@ body {
 }
 
 ::view-transition-group(page-content) {
-  animation-duration: 450ms;
+  animation-duration: 180ms;
   animation-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
 }
 
@@ -47,4 +47,20 @@ body {
 
 ::view-transition-new(page-content) {
   animation-name: slide-in-down;
+}
+
+.app-navigation {
+  padding-bottom: max(1rem, env(safe-area-inset-bottom));
+}
+
+.app-page {
+  padding-bottom: calc(6rem + env(safe-area-inset-bottom));
+}
+
+@media (prefers-reduced-motion: reduce) {
+  ::view-transition-group(page-content),
+  ::view-transition-old(page-content),
+  ::view-transition-new(page-content) {
+    animation: none;
+  }
 }

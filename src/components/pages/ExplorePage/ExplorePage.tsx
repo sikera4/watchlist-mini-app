@@ -4,7 +4,11 @@ import { Genre, useMoviesListQuery, useSearchQuery } from '@/api';
 import { useIsScrolledToBottom } from '@/hooks/isScrolledToBottom';
 import { Button, Input, Spinner } from '@heroui/react';
 import { useTranslations } from 'next-intl';
-import React, { useEffect, useState } from 'react';
+import React, { useEffect } from 'react';
+import {
+  useBrowsingState,
+  useRememberPageScroll,
+} from '@/components/providers/BrowsingStateProvider';
 import { useForm } from 'react-hook-form';
 import Card from './Card';
 import { SearchFormValues } from './types';
@@ -19,12 +23,17 @@ type Props = {
 };
 
 const ExplorePage = ({ moviesGenresList, tvShowsGenresList }: Props) => {
-  const [searchTerm, setSearchTerm] = useState('');
+  const { searchTerm, setSearchTerm, searchDraft, setSearchDraft } = useBrowsingState();
+  useRememberPageScroll('/explore');
 
   const moviesListQuery = useMoviesListQuery();
   const searchQuery = useSearchQuery(searchTerm);
 
-  const { register, handleSubmit: rhfHandleSubmit, reset } = useForm<SearchFormValues>();
+  const {
+    register,
+    handleSubmit: rhfHandleSubmit,
+    reset,
+  } = useForm<SearchFormValues>({ defaultValues: { searchInput: searchDraft } });
 
   const registerHapticFeedback = useRegisterHapticFeedback();
 
@@ -57,7 +66,8 @@ const ExplorePage = ({ moviesGenresList, tvShowsGenresList }: Props) => {
 
   const handleResetSearchFormButtonClick = () => {
     setSearchTerm('');
-    reset();
+    setSearchDraft('');
+    reset({ searchInput: '' });
   };
 
   const renderSearchedItems = () => {
@@ -106,8 +116,8 @@ const ExplorePage = ({ moviesGenresList, tvShowsGenresList }: Props) => {
   };
 
   return (
-    <div className="px-4 pb-4 relative min-h-screen">
-      <div className="bg-background py-4 sticky top-0 z-10">
+    <div className="app-page px-4 relative min-h-screen">
+      <div className="telegram-theme-surface -mx-4 px-4 py-4 sticky top-0 z-10">
         <form onSubmit={rhfHandleSubmit(handleSubmit)}>
           <div className="grid grid-cols-6 gap-4">
             <Input
@@ -117,7 +127,9 @@ const ExplorePage = ({ moviesGenresList, tvShowsGenresList }: Props) => {
               autoComplete="off"
               radius="lg"
               isDisabled={Boolean(searchTerm)}
-              {...register('searchInput')}
+              {...register('searchInput', {
+                onChange: (event) => setSearchDraft(event.target.value),
+              })}
             />
             {Boolean(searchTerm) ? (
               <Button

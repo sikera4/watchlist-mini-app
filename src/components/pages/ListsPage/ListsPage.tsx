@@ -9,8 +9,10 @@ import { Accordion, AccordionItem, Button, Spinner } from '@heroui/react';
 import { FaPenToSquare, FaRegTrashCan } from 'react-icons/fa6';
 import CreateListForm from './CreateListForm';
 import ListItem from './ListItem';
+import { useRememberPageScroll } from '@/components/providers/BrowsingStateProvider';
 
 const ListsPage = () => {
+  useRememberPageScroll('/');
   const { watchlists, isLoading } = useWatchlists();
 
   const [watchlistBeingEditedKey, setWatchlistsBeingEditedKey] = useState<string | null>(null);
@@ -53,7 +55,7 @@ const ListsPage = () => {
   };
 
   return (
-    <div className="p-4 min-h-screen relative">
+    <div className="app-page p-4 min-h-screen relative">
       <h2 className="text-2xl font-bold">Ваши списки</h2>
       <div className="mt-4">
         {isLoading ? (

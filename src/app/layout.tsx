@@ -105,10 +105,8 @@ export default async function RootLayout({
         <ReactQueryProvider>
           <NextIntlClientProvider>
             <Providers>
-              <ViewTransition name="page-content">
-                {children}
-                <Navigation />
-              </ViewTransition>
+              <ViewTransition name="page-content">{children}</ViewTransition>
+              <Navigation />
             </Providers>
           </NextIntlClientProvider>
         </ReactQueryProvider>
