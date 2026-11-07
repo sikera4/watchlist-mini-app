@@ -60,9 +60,11 @@ const ListItem = ({ item, watchlistId, isEditMode, onSelectionChange }: Props) =
         </Button>
         <AnimatedPresenceFacade isVisible={isEditMode}>
           <Checkbox aria-label={`Выбрать: ${title}`} onChange={onSelectionChange}>
-            <Checkbox.Control>
-              <Checkbox.Indicator />
-            </Checkbox.Control>
+            <Checkbox.Content aria-label={`Выбрать: ${title}`}>
+              <Checkbox.Control>
+                <Checkbox.Indicator />
+              </Checkbox.Control>
+            </Checkbox.Content>
           </Checkbox>
         </AnimatedPresenceFacade>
       </motion.div>
