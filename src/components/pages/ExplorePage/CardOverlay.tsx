@@ -8,25 +8,27 @@ import { Button } from '@heroui/react';
 type Params = {
   isVisible: boolean;
   mediaItem: CardData;
+  onClose: () => void;
 };
 
-const CardOverlay = ({ isVisible, mediaItem }: Params) => {
+const CardOverlay = ({ isVisible, mediaItem, onClose }: Params) => {
   const { drawerNode, openDrawer } = useMediaItemInfoDrawer();
 
   return (
-    <div
-      className={`flex opacity-${isVisible ? 1 : 0} absolute top-0 left-0 right-0 bottom-0 bg-background/60 flex-col justify-center items-center transition-opacity duration-200`}
-    >
+    <>
       {isVisible && (
-        <>
+        <div className="absolute inset-0 flex flex-col items-center justify-center gap-2 rounded-xl bg-surface/95 p-3 shadow-sm backdrop-blur-sm">
           <AddToWatchlistModal mediaItem={mediaItem} />
-          <Button className="mt-2" onPress={() => openDrawer(mediaItem)}>
+          <Button variant="secondary" onPress={() => openDrawer(mediaItem)}>
             Подробнее
           </Button>
-        </>
+          <Button size="sm" variant="ghost" onPress={onClose}>
+            Закрыть
+          </Button>
+        </div>
       )}
       {drawerNode}
-    </div>
+    </>
   );
 };
 

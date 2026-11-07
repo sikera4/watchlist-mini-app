@@ -1,28 +1,29 @@
 import { MediaItem, useMarkAsSeenMutation } from '@/api';
-import { motion } from 'framer-motion';
 import { formatYear } from '@/utilities/formatYear';
-import { toast, Button, Checkbox } from '@heroui/react';
+import { toast, Button, Checkbox, Spinner } from '@heroui/react';
+import { FaCheck, FaRegCircle } from 'react-icons/fa6';
 import Poster from '@/components/ui/Poster';
-import { FaCircleCheck, FaRegCircleCheck } from 'react-icons/fa6';
-import AnimatedPresenceFacade from '@/components/ui/AnimatedPresenceFacade';
 
 type Props = {
   item: MediaItem;
   watchlistId: string;
   isEditMode: boolean;
+  isSelected: boolean;
   onSelectionChange: (isSelected: boolean) => void;
 };
 
-const ListItem = ({ item, watchlistId, isEditMode, onSelectionChange }: Props) => {
+export default function ListItem({
+  item,
+  watchlistId,
+  isEditMode,
+  isSelected,
+  onSelectionChange,
+}: Props) {
   const { title, releaseDate, posterPath, isSeen, id } = item;
 
   const markAsSeenMutation = useMarkAsSeenMutation({
-    onSuccess: () => {
-      toast.success('Отмечено как просмотренное');
-    },
-    onError: () => {
-      toast.danger('Не удалось отметить просмотренным');
-    },
+    onSuccess: () => toast.success('Отмечено как просмотренное'),
+    onError: () => toast.danger('Не удалось отметить просмотренным'),
   });
 
   const handleMarkAsSeen = () => {
@@ -32,44 +33,62 @@ const ListItem = ({ item, watchlistId, isEditMode, onSelectionChange }: Props) =
   };
 
   return (
-    <div className="flex relative gap-4 items-center justify-between">
-      <div className="flex gap-4 items-center">
-        <Poster
-          path={posterPath}
-          title={title}
-          className="w-12 h-18 shrink-0 rounded-md"
-          sizes="48px"
-        />
-        <div>
-          <h4 className="text-lg font-bold">{title}</h4>
-          {!!releaseDate && (
-            <span className="text-sm mt-1">{formatYear(new Date(releaseDate))}</span>
+    <li className="flex items-center gap-3 rounded-xl py-3">
+      <Poster
+        path={posterPath}
+        title={title}
+        className={`h-20 w-14 shrink-0 rounded-lg ${isSeen ? 'opacity-60' : ''}`}
+        sizes="56px"
+      />
+
+      <div className="min-w-0 flex-1">
+        <h3
+          className={`line-clamp-2 text-sm font-semibold leading-snug ${isSeen ? 'text-muted' : 'text-foreground'}`}
+        >
+          {title}
+        </h3>
+        <div className="mt-1.5 flex flex-wrap items-center gap-x-2 gap-y-1 text-xs text-muted">
+          {releaseDate && <span>{formatYear(new Date(releaseDate))}</span>}
+          {isSeen && (
+            <span className="flex items-center gap-1 text-success">
+              <FaCheck aria-hidden="true" /> Просмотрено
+            </span>
           )}
         </div>
       </div>
-      <motion.div className="flex gap-1 items-center" animate={{ width: isEditMode ? 76 : 40 }}>
+
+      {isEditMode ? (
+        <Checkbox
+          aria-label={`Выбрать: ${title}`}
+          isSelected={isSelected}
+          onChange={onSelectionChange}
+          className="shrink-0 p-3"
+        >
+          <Checkbox.Content aria-label={`Выбрать: ${title}`}>
+            <Checkbox.Control>
+              <Checkbox.Indicator />
+            </Checkbox.Control>
+          </Checkbox.Content>
+        </Checkbox>
+      ) : (
         <Button
-          isIconOnly={true}
+          isIconOnly
           aria-label={isSeen ? `${title}: просмотрено` : `Отметить просмотренным: ${title}`}
-          variant={isSeen ? 'ghost' : 'secondary'}
+          variant="ghost"
+          className={`shrink-0 ${isSeen ? 'text-success' : 'text-muted'}`}
           onPress={handleMarkAsSeen}
           isPending={markAsSeenMutation.isPending}
           isDisabled={isSeen}
         >
-          {isSeen ? <FaRegCircleCheck className="size-6" /> : <FaCircleCheck className="size-6" />}
+          {markAsSeenMutation.isPending ? (
+            <Spinner size="sm" />
+          ) : isSeen ? (
+            <FaCheck />
+          ) : (
+            <FaRegCircle className="size-5" />
+          )}
         </Button>
-        <AnimatedPresenceFacade isVisible={isEditMode}>
-          <Checkbox aria-label={`Выбрать: ${title}`} onChange={onSelectionChange}>
-            <Checkbox.Content aria-label={`Выбрать: ${title}`}>
-              <Checkbox.Control>
-                <Checkbox.Indicator />
-              </Checkbox.Control>
-            </Checkbox.Content>
-          </Checkbox>
-        </AnimatedPresenceFacade>
-      </motion.div>
-    </div>
+      )}
+    </li>
   );
-};
-
-export default ListItem;
+}

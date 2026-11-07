@@ -1,142 +1,89 @@
 'use client';
 
-import { useState } from 'react';
-
-import { useRemoveFromWatchlistMutation } from '@/api';
-import AnimatedPresenceFacade from '@/components/ui/AnimatedPresenceFacade';
-import { useWatchlists } from '@/hooks/useWatchlists';
 import { Accordion, Button, Spinner } from '@heroui/react';
-import { FaPenToSquare, FaRegTrashCan } from 'react-icons/fa6';
-import CreateListForm from './CreateListForm';
-import ListItem from './ListItem';
+import { FaFilm, FaLayerGroup } from 'react-icons/fa6';
 import { useRememberPageScroll } from '@/components/providers/BrowsingStateProvider';
+import { useWatchlists } from '@/hooks/useWatchlists';
+import CollectionCard from './CollectionCard';
+import CreateListForm from './CreateListForm';
 
-const ListsPage = () => {
+export default function ListsPage() {
   useRememberPageScroll('/');
-  const { watchlists, isLoading } = useWatchlists();
 
-  const [watchlistBeingEditedKey, setWatchlistsBeingEditedKey] = useState<string | null>(null);
-  const [selectedItemsIds, setSelectedItemsIds] = useState<number[]>([]);
-
-  const removeFromWatchlistMutation = useRemoveFromWatchlistMutation({
-    onSuccess: () => {
-      setSelectedItemsIds([]);
-      setWatchlistsBeingEditedKey(null);
-    },
-  });
-
-  const handleEditButtonClick = (watchlistId: string) => {
-    setWatchlistsBeingEditedKey((prev) => (prev === watchlistId ? null : watchlistId));
-    setSelectedItemsIds([]);
-  };
-
-  const handleSelectionChange = (itemId: number, isSelected: boolean) => {
-    if (isSelected) {
-      setSelectedItemsIds([...selectedItemsIds, itemId]);
-    } else {
-      setSelectedItemsIds(selectedItemsIds.filter((id) => id !== itemId));
-    }
-  };
-
-  const handleDeleteButtonClick = () => {
-    const watchlistBeingEdited = watchlists.find(
-      (watchlist) => watchlist.id === watchlistBeingEditedKey
-    );
-    const mediaItemsToDelete =
-      watchlistBeingEdited?.items.filter((mediaItem) => selectedItemsIds.includes(mediaItem.id)) ??
-      [];
-
-    if (watchlistBeingEditedKey) {
-      removeFromWatchlistMutation.mutate({
-        watchlistId: watchlistBeingEditedKey,
-        mediaItems: mediaItemsToDelete,
-      });
-    }
-  };
+  const { watchlists, isLoading, isError, refetch } = useWatchlists();
+  const items = watchlists.flatMap((list) => list.items);
+  const watchedCount = items.filter((item) => item.isSeen).length;
 
   return (
-    <div className="app-page p-4 min-h-screen relative">
-      <h2 className="text-2xl font-bold">Ваши списки</h2>
-      <div className="mt-4">
-        {isLoading ? (
-          <div className="absolute top-[calc(50%-20px)] left-[calc(50%-20px)]">
-            <Spinner size="lg" />
-          </div>
-        ) : (
-          <div className="flex flex-col">
-            {watchlists.length ? (
-              <Accordion>
-                {watchlists.map((watchlist) => {
-                  const isEditMode = watchlistBeingEditedKey === watchlist.id;
+    <div className="app-page mx-auto min-h-screen max-w-2xl px-5 pt-7 sm:pt-10">
+      <header className="mb-7">
+        <div className="mb-4 flex items-center gap-2 text-xs font-semibold uppercase tracking-[0.2em] text-accent">
+          <FaFilm aria-hidden="true" /> Watchlist
+        </div>
+        <h1 className="text-3xl font-semibold tracking-tight sm:text-4xl">Ваша кинотека</h1>
+        <p className="mt-2 text-sm leading-relaxed text-muted">
+          Для тихого вечера. Или целого киномарафона.
+        </p>
+      </header>
 
-                  return (
-                    <Accordion.Item key={watchlist.id} id={watchlist.id}>
-                      <Accordion.Heading>
-                        <Accordion.Trigger>
-                          {watchlist.name}
-                          <Accordion.Indicator />
-                        </Accordion.Trigger>
-                      </Accordion.Heading>
-                      <Accordion.Panel>
-                        <Accordion.Body>
-                          {Boolean(watchlist.items.length) && (
-                            <div className="flex gap-2 justify-end py-2">
-                              <AnimatedPresenceFacade isVisible={isEditMode}>
-                                <Button
-                                  isIconOnly={true}
-                                  size="sm"
-                                  variant="danger"
-                                  aria-label="Удалить выбранное"
-                                  isDisabled={!selectedItemsIds.length}
-                                  isPending={removeFromWatchlistMutation.isPending}
-                                  onPress={handleDeleteButtonClick}
-                                >
-                                  <FaRegTrashCan />
-                                </Button>
-                              </AnimatedPresenceFacade>
-                              <Button
-                                isIconOnly={true}
-                                size="sm"
-                                variant={isEditMode ? 'primary' : 'secondary'}
-                                aria-label={isEditMode ? 'Завершить выбор' : 'Выбрать для удаления'}
-                                onPress={() => handleEditButtonClick(watchlist.id)}
-                              >
-                                <FaPenToSquare />
-                              </Button>
-                            </div>
-                          )}
-                          <ul className="list-none flex flex-col gap-2">
-                            {watchlist.items.length ? (
-                              watchlist.items.map((item) => (
-                                <ListItem
-                                  key={item.id}
-                                  item={item}
-                                  watchlistId={watchlist.id}
-                                  isEditMode={isEditMode}
-                                  onSelectionChange={(isSelected) =>
-                                    handleSelectionChange(item.id, isSelected)
-                                  }
-                                />
-                              ))
-                            ) : (
-                              <span>Список пуст</span>
-                            )}
-                          </ul>
-                        </Accordion.Body>
-                      </Accordion.Panel>
-                    </Accordion.Item>
-                  );
-                })}
-              </Accordion>
-            ) : (
-              <span>Списков нет</span>
-            )}
-            <CreateListForm className="mt-4" />
+      {isError && (
+        <div
+          role="alert"
+          className="mb-5 rounded-2xl border border-warning/30 bg-warning/10 p-4 text-sm"
+        >
+          <p>Не удалось обновить списки. Показываем последние загруженные данные.</p>
+          <Button variant="tertiary" size="sm" className="mt-2" onPress={() => void refetch()}>
+            Повторить
+          </Button>
+        </div>
+      )}
+
+      {isLoading ? (
+        <div role="status" className="flex justify-center py-12">
+          <Spinner />
+          <span className="sr-only">Загружаем списки</span>
+        </div>
+      ) : (
+        <>
+          {watchlists.length > 0 && (
+            <dl className="mb-7 grid grid-cols-3 divide-x divide-border rounded-2xl border border-border bg-surface px-2 py-4">
+              {[
+                ['Списки', watchlists.length],
+                ['На очереди', items.length - watchedCount],
+                ['Просмотрено', watchedCount],
+              ].map(([label, count]) => (
+                <div key={label} className="px-2 text-center">
+                  <dd className="text-2xl font-semibold tabular-nums">{count}</dd>
+                  <dt className="mt-1 text-xs text-muted">{label}</dt>
+                </div>
+              ))}
+            </dl>
+          )}
+
+          <div className="mb-5">
+            <CreateListForm />
           </div>
-        )}
-      </div>
+
+          {watchlists.length > 0 ? (
+            <Accordion allowsMultipleExpanded className="flex flex-col gap-4">
+              {watchlists.map((watchlist) => (
+                <CollectionCard key={watchlist.id} watchlist={watchlist} />
+              ))}
+            </Accordion>
+          ) : !isError ? (
+            <section className="rounded-3xl border border-dashed border-border bg-surface/60 px-6 py-12 text-center">
+              <div className="mx-auto mb-5 flex size-16 items-center justify-center rounded-2xl bg-accent/10 text-accent">
+                <FaLayerGroup className="size-6" aria-hidden="true" />
+              </div>
+              <h2 className="text-xl font-semibold">Хорошие истории начинаются здесь</h2>
+              <p className="mx-auto mt-3 max-w-xs text-sm leading-relaxed text-muted">
+                Создайте первый список — например, «На выходные». Затем добавьте фильмы и сериалы из
+                Обзора.
+              </p>
+            </section>
+          ) : null}
+        </>
+      )}
     </div>
   );
-};
-
-export default ListsPage;
+}
