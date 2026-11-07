@@ -1,7 +1,4 @@
-import { PLACEHOLDER_URL } from '@/constants';
-import { getImageSrcByPath } from '@/utilities/getImageSrcByPath';
-import { Image } from '@heroui/react';
-import NextImage from 'next/image';
+import Poster from '@/components/ui/Poster';
 import { useState } from 'react';
 import CardOverlay from './CardOverlay';
 import { CardData } from './types';
@@ -13,19 +10,13 @@ const Card = ({ title, posterPath, genres, releaseDate, id, originalTitle, overv
 
   return (
     <div className="relative" onClick={() => setIsTapped(!isTapped)}>
-      <Image
-        alt={`${title} poster`}
-        className="object-cover"
-        classNames={{
-          wrapper: '!max-w-none relative z-0 h-[270px]',
-          img: 'object-cover border-md',
-        }}
-        src={getImageSrcByPath(posterPath)}
-        fallbackSrc={PLACEHOLDER_URL}
-        fill={true}
-        as={NextImage}
+      <Poster
+        path={posterPath}
+        title={title}
+        className="h-[270px] rounded-xl"
+        sizes="(max-width: 640px) 50vw, 300px"
       />
-      <h4 className="text-lg font-bold mt-2">{title ?? name}</h4>
+      <h4 className="text-lg font-bold mt-2">{title}</h4>
       <span className="text-sm font-light">
         {Boolean(releaseDate) && releaseDate}
         {Boolean(releaseDate && genres) && ', '}

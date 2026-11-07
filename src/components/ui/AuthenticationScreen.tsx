@@ -13,17 +13,9 @@ const AuthenticationScreen = ({ state, onRetry }: Props) => {
     return (
       <main className="telegram-theme-surface min-h-screen flex flex-col items-center justify-center overflow-hidden p-6 text-center">
         <div className="relative flex size-24 items-center justify-center">
-          <div className="absolute size-20 animate-pulse rounded-full bg-primary/25 blur-2xl motion-reduce:animate-none" />
-          <Spinner
-            aria-label="Загрузка приложения"
-            color="primary"
-            size="lg"
-            variant="gradient"
-            classNames={{
-              wrapper: 'size-16',
-            }}
-          />
-          <FaFilm className="pointer-events-none absolute size-5 text-primary-foreground" />
+          <div className="absolute size-20 animate-pulse rounded-full bg-accent/25 blur-2xl motion-reduce:animate-none" />
+          <Spinner aria-label="Загрузка приложения" size="lg" className="size-16 text-accent" />
+          <FaFilm className="pointer-events-none absolute size-5 text-accent" />
         </div>
         <h1 className="mt-5 text-2xl font-bold tracking-tight">Watchlist</h1>
         <p className="mt-2 text-sm text-foreground/65">Загружаем ваши списки…</p>
@@ -37,8 +29,8 @@ const AuthenticationScreen = ({ state, onRetry }: Props) => {
   return (
     <main className="telegram-theme-surface min-h-screen flex items-center justify-center p-6 text-center">
       <div className="flex max-w-sm flex-col items-center">
-        <div className="flex size-16 items-center justify-center rounded-2xl bg-default-100">
-          <FaFilm className="size-7 text-primary" />
+        <div className="flex size-16 items-center justify-center rounded-2xl bg-surface-secondary">
+          <FaFilm className="size-7 text-accent" />
         </div>
         <h1 className="mt-5 text-xl font-bold">
           {isDataError
@@ -57,7 +49,7 @@ const AuthenticationScreen = ({ state, onRetry }: Props) => {
         {isError && (
           <Button
             className="mt-5"
-            color="primary"
+            variant="primary"
             onPress={onRetry ?? (() => window.location.reload())}
           >
             Повторить

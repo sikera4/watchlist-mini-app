@@ -1,5 +1,5 @@
 import { List, useAddToWatchlistMutation } from '@/api';
-import { addToast, Button } from '@heroui/react';
+import { toast, Button } from '@heroui/react';
 import { useTranslations } from 'next-intl';
 import { useState } from 'react';
 import { CardData } from './types';
@@ -20,10 +20,7 @@ const AddToWatchlistItem = ({ watchlist, mediaItem }: Props) => {
   const addToWatchlistMutation = useAddToWatchlistMutation({
     onError: () => {
       setIsAdded(false);
-      addToast({
-        title: 'Ошибка добавления фильма.',
-        color: 'danger',
-      });
+      toast.danger('Ошибка добавления фильма.');
     },
   });
 
@@ -41,12 +38,7 @@ const AddToWatchlistItem = ({ watchlist, mediaItem }: Props) => {
       },
     });
 
-    addToast({
-      color: 'success',
-      title: t('added'),
-      shouldShowTimeoutProgress: true,
-      timeout: 2000,
-    });
+    toast.success(t('added'), { timeout: 2000 });
   };
 
   return (
