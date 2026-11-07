@@ -4,7 +4,10 @@ type Props = ComponentProps<'div'>;
 
 const Skeleton = ({ children, className, ...otherProps }: Props) => {
   return (
-    <div className={`animate-pulse bg-gray-300 ${className}`} {...otherProps}>
+    <div
+      className={`animate-pulse motion-reduce:animate-none bg-default-200 ${className}`}
+      {...otherProps}
+    >
       {children}
     </div>
   );

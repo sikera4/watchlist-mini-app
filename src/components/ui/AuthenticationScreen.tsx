@@ -4,10 +4,11 @@ import { Button, Spinner } from '@heroui/react';
 import { FaFilm } from 'react-icons/fa6';
 
 type Props = {
-  state: 'loading' | 'outside-telegram' | 'error';
+  state: 'loading' | 'outside-telegram' | 'error' | 'data-error';
+  onRetry?: () => void;
 };
 
-const AuthenticationScreen = ({ state }: Props) => {
+const AuthenticationScreen = ({ state, onRetry }: Props) => {
   if (state === 'loading') {
     return (
       <main className="telegram-theme-surface min-h-screen flex flex-col items-center justify-center overflow-hidden p-6 text-center">
@@ -30,7 +31,8 @@ const AuthenticationScreen = ({ state }: Props) => {
     );
   }
 
-  const isError = state === 'error';
+  const isError = state === 'error' || state === 'data-error';
+  const isDataError = state === 'data-error';
 
   return (
     <main className="telegram-theme-surface min-h-screen flex items-center justify-center p-6 text-center">
@@ -39,15 +41,25 @@ const AuthenticationScreen = ({ state }: Props) => {
           <FaFilm className="size-7 text-primary" />
         </div>
         <h1 className="mt-5 text-xl font-bold">
-          {isError ? 'Не удалось войти' : 'Откройте приложение в Telegram'}
+          {isDataError
+            ? 'Не удалось загрузить списки'
+            : isError
+              ? 'Не удалось войти'
+              : 'Откройте приложение в Telegram'}
         </h1>
         <p className="mt-2 text-sm text-foreground/65">
-          {isError
-            ? 'Не удалось подтвердить сессию Telegram. Попробуйте открыть приложение заново.'
-            : 'Для входа нужна подтверждённая сессия Telegram-бота.'}
+          {isDataError
+            ? 'Проверьте подключение к интернету и попробуйте ещё раз. Ваши списки сохранены.'
+            : isError
+              ? 'Не удалось подтвердить сессию Telegram. Попробуйте открыть приложение заново.'
+              : 'Для входа нужна подтверждённая сессия Telegram-бота.'}
         </p>
         {isError && (
-          <Button className="mt-5" color="primary" onPress={() => window.location.reload()}>
+          <Button
+            className="mt-5"
+            color="primary"
+            onPress={onRetry ?? (() => window.location.reload())}
+          >
             Повторить
           </Button>
         )}

@@ -2,6 +2,8 @@
 
 import { auth } from '@/utilities/initializeFirebase';
 import AuthenticationScreen from '@/components/ui/AuthenticationScreen';
+import AppStartupGate from '@/components/ui/AppStartupGate';
+import { useRouter } from 'next/navigation';
 import { browserSessionPersistence, setPersistence, signInWithCustomToken } from 'firebase/auth';
 import { createContext, ReactNode, useContext, useEffect, useState } from 'react';
 import { WebApp } from 'telegram-web-app';
@@ -22,6 +24,7 @@ type Params = {
 };
 
 const TelegramAppProvider = ({ children }: Params) => {
+  const router = useRouter();
   const [tgWebApp, setTgWebApp] = useState<WebApp | null>(null);
   const [authenticatedUserId, setAuthenticatedUserId] = useState<string | null>(null);
   const [status, setStatus] = useState<'loading' | 'authenticated' | 'outside-telegram' | 'error'>(
@@ -45,6 +48,10 @@ const TelegramAppProvider = ({ children }: Params) => {
 
       webApp.ready();
       webApp.expand();
+
+      // Route code and public Explore data can warm while private authentication runs.
+      router.prefetch('/');
+      router.prefetch('/explore');
 
       if (!isCancelled) {
         setTgWebApp(webApp);
@@ -86,7 +93,7 @@ const TelegramAppProvider = ({ children }: Params) => {
     return () => {
       isCancelled = true;
     };
-  }, []);
+  }, [router]);
 
   let content: ReactNode;
 
@@ -97,7 +104,11 @@ const TelegramAppProvider = ({ children }: Params) => {
   } else if (status === 'loading') {
     content = <AuthenticationScreen state="loading" />;
   } else {
-    content = children;
+    content = authenticatedUserId ? (
+      <AppStartupGate userId={authenticatedUserId}>{children}</AppStartupGate>
+    ) : (
+      <AuthenticationScreen state="loading" />
+    );
   }
 
   return (

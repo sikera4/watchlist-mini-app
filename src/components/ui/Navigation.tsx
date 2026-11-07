@@ -1,40 +1,52 @@
 'use client';
 
 import { useRegisterHapticFeedback } from '@/hooks/useRegisterHapticFeedback';
-import { Tab, Tabs } from '@heroui/react';
-import { usePathname, useRouter } from 'next/navigation';
-import { Key } from 'react';
+import Link, { useLinkStatus } from 'next/link';
+import { usePathname } from 'next/navigation';
+import { FaCompass, FaLayerGroup } from 'react-icons/fa6';
 
 const navItems = [
-  { route: '/', label: 'Списки' },
-  { route: '/explore', label: 'Explore' },
+  { route: '/', label: 'Списки', Icon: FaLayerGroup },
+  { route: '/explore', label: 'Обзор', Icon: FaCompass },
 ];
+
+function PendingIndicator() {
+  const { pending } = useLinkStatus();
+
+  return pending ? (
+    <span role="status" className="size-2 animate-pulse rounded-full bg-current">
+      <span className="sr-only">Открываем страницу…</span>
+    </span>
+  ) : null;
+}
 
 const Navigation = () => {
   const pathname = usePathname();
 
   const registerHapticFeedback = useRegisterHapticFeedback();
-  const router = useRouter();
-
-  const handleSelectionChange = (key: Key) => {
-    registerHapticFeedback('soft');
-
-    if (typeof key === 'string') {
-      router.push(key);
-    }
-  };
 
   return (
-    <nav className="pb-4 fixed bottom-0 left-0 right-0 flex justify-center pointer-events-none z-50">
-      <Tabs
-        selectedKey={pathname}
-        className="pointer-events-auto"
-        onSelectionChange={handleSelectionChange}
-      >
-        {navItems.map(({ route, label }) => (
-          <Tab key={route} title={label} />
+    <nav
+      aria-label="Основная навигация"
+      className="app-navigation fixed inset-x-0 bottom-0 z-50 flex justify-center px-4 pointer-events-none"
+    >
+      <div className="flex gap-1 rounded-full border border-default-200 bg-content1/95 p-1.5 shadow-lg backdrop-blur-xl pointer-events-auto">
+        {navItems.map(({ route, label, Icon }) => (
+          <Link
+            key={route}
+            href={route}
+            prefetch={true}
+            scroll={false}
+            aria-current={pathname === route ? 'page' : undefined}
+            onNavigate={() => registerHapticFeedback('soft')}
+            className={`flex min-h-11 items-center justify-center gap-2 rounded-full px-5 text-sm font-medium transition-colors focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary ${pathname === route ? 'bg-primary text-primary-foreground' : 'text-foreground/65 hover:bg-default-100'}`}
+          >
+            <Icon aria-hidden="true" />
+            {label}
+            <PendingIndicator />
+          </Link>
         ))}
-      </Tabs>
+      </div>
     </nav>
   );
 };

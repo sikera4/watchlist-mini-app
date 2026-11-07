@@ -9,5 +9,7 @@ export const useWatchlists = () => {
   return {
     watchlists: watchlistsQuery.data ?? [],
     isLoading: watchlistsQuery.isLoading,
+    isError: watchlistsQuery.isError,
+    refetch: watchlistsQuery.refetch,
   };
 };
