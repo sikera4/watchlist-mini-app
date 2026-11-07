@@ -94,6 +94,22 @@ export function useCreateListMutation(options?: Callbacks) {
   );
 }
 
+export function useAddToWatchlistMutation(options?: Callbacks) {
+  const [, setLists] = useData();
+
+  return useSampleMutation(
+    ({ watchlistId, mediaItem }: { watchlistId: string; mediaItem: MediaItem }) =>
+      setLists((lists) =>
+        lists.map((list) =>
+          list.id === watchlistId && !list.items.some((item) => item.id === mediaItem.id)
+            ? { ...list, items: [...list.items, mediaItem] }
+            : list
+        )
+      ),
+    options
+  );
+}
+
 type WatchedParams = { watchlistId: string; mediaId: number; isSeen: boolean };
 
 export function useSetWatchedMutation(options?: Callbacks<WatchedParams>) {
