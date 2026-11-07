@@ -5,7 +5,7 @@ import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { CreateListFormValues } from './types';
 import { useAuthenticatedUserId } from '@/components/providers/TelegramAppProvider';
-import { addToast, Button, Input } from '@heroui/react';
+import { toast, Button, Input, TextField, Label } from '@heroui/react';
 import { useRegisterHapticFeedback } from '@/hooks/useRegisterHapticFeedback';
 
 type Props = {
@@ -25,16 +25,10 @@ const CreateCollectionForm = ({ className }: Props) => {
       setIsFormMode(false);
       reset();
 
-      addToast({
-        title: 'Список успешно создан',
-        color: 'success',
-      });
+      toast.success('Список успешно создан');
     },
     onError: () => {
-      addToast({
-        title: 'Ошибка при создании списка',
-        color: 'danger',
-      });
+      toast.danger('Ошибка при создании списка');
     },
   });
 
@@ -50,15 +44,12 @@ const CreateCollectionForm = ({ className }: Props) => {
       {isFormMode ? (
         <form onSubmit={rhfHandleSubmit(handleSubmit)}>
           <div className="flex flex-col gap-2">
-            <Input
-              label="List name"
-              isRequired
-              minLength={1}
-              maxLength={100}
-              {...register('name')}
-            />
+            <TextField isRequired>
+              <Label>Название списка</Label>
+              <Input minLength={1} maxLength={100} {...register('name')} />
+            </TextField>
             <div className="grid grid-cols-2 gap-2">
-              <Button type="submit" isLoading={createListMutation.isPending}>
+              <Button type="submit" isPending={createListMutation.isPending}>
                 Добавить
               </Button>
               <Button onPress={() => setIsFormMode(false)}>Отмена</Button>

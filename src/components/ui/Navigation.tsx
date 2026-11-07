@@ -30,7 +30,7 @@ const Navigation = () => {
       aria-label="Основная навигация"
       className="app-navigation fixed inset-x-0 bottom-0 z-50 flex justify-center px-4 pointer-events-none"
     >
-      <div className="flex gap-1 rounded-full border border-default-200 bg-content1/95 p-1.5 shadow-lg backdrop-blur-xl pointer-events-auto">
+      <div className="flex gap-1 rounded-full border border-border bg-surface/95 p-1.5 shadow-lg backdrop-blur-xl pointer-events-auto">
         {navItems.map(({ route, label, Icon }) => (
           <Link
             key={route}
@@ -39,7 +39,7 @@ const Navigation = () => {
             scroll={false}
             aria-current={pathname === route ? 'page' : undefined}
             onNavigate={() => registerHapticFeedback('soft')}
-            className={`flex min-h-11 items-center justify-center gap-2 rounded-full px-5 text-sm font-medium transition-colors focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary ${pathname === route ? 'bg-primary text-primary-foreground' : 'text-foreground/65 hover:bg-default-100'}`}
+            className={`flex min-h-11 items-center justify-center gap-2 rounded-full px-5 text-sm font-medium transition-colors focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent ${pathname === route ? 'bg-accent text-accent-foreground' : 'text-muted hover:bg-surface-secondary'}`}
           >
             <Icon aria-hidden="true" />
             {label}

@@ -1,11 +1,9 @@
 import { MediaItem, useMarkAsSeenMutation } from '@/api';
 import { motion } from 'framer-motion';
-import { PLACEHOLDER_URL } from '@/constants';
 import { formatYear } from '@/utilities/formatYear';
-import { getImageSrcByPath } from '@/utilities/getImageSrcByPath';
-import { addToast, Button, Checkbox, Chip, Image } from '@heroui/react';
+import { toast, Button, Checkbox } from '@heroui/react';
+import Poster from '@/components/ui/Poster';
 import { FaCircleCheck, FaRegCircleCheck } from 'react-icons/fa6';
-import NextImage from 'next/image';
 import AnimatedPresenceFacade from '@/components/ui/AnimatedPresenceFacade';
 
 type Props = {
@@ -20,16 +18,10 @@ const ListItem = ({ item, watchlistId, isEditMode, onSelectionChange }: Props) =
 
   const markAsSeenMutation = useMarkAsSeenMutation({
     onSuccess: () => {
-      addToast({
-        color: 'success',
-        title: 'Marked as seen',
-      });
+      toast.success('Отмечено как просмотренное');
     },
     onError: () => {
-      addToast({
-        color: 'danger',
-        title: 'Failed to mark as seen',
-      });
+      toast.danger('Не удалось отметить просмотренным');
     },
   });
 
@@ -42,16 +34,11 @@ const ListItem = ({ item, watchlistId, isEditMode, onSelectionChange }: Props) =
   return (
     <div className="flex relative gap-4 items-center justify-between">
       <div className="flex gap-4 items-center">
-        <Image
-          src={getImageSrcByPath(posterPath)}
-          alt={`${title} poster`}
-          fill={true}
-          classNames={{
-            wrapper: '!max-w-none min-w-12 w-12 h-18 relative',
-            img: 'rounded-md cover',
-          }}
-          fallbackSrc={PLACEHOLDER_URL}
-          as={NextImage}
+        <Poster
+          path={posterPath}
+          title={title}
+          className="w-12 h-18 shrink-0 rounded-md"
+          sizes="48px"
         />
         <div>
           <h4 className="text-lg font-bold">{title}</h4>
@@ -63,15 +50,20 @@ const ListItem = ({ item, watchlistId, isEditMode, onSelectionChange }: Props) =
       <motion.div className="flex gap-1 items-center" animate={{ width: isEditMode ? 76 : 40 }}>
         <Button
           isIconOnly={true}
-          variant={isSeen ? 'light' : 'faded'}
+          aria-label={isSeen ? `${title}: просмотрено` : `Отметить просмотренным: ${title}`}
+          variant={isSeen ? 'ghost' : 'secondary'}
           onPress={handleMarkAsSeen}
-          isLoading={markAsSeenMutation.isPending}
+          isPending={markAsSeenMutation.isPending}
           isDisabled={isSeen}
         >
           {isSeen ? <FaRegCircleCheck className="size-6" /> : <FaCircleCheck className="size-6" />}
         </Button>
         <AnimatedPresenceFacade isVisible={isEditMode}>
-          <Checkbox size="lg" color="default" onValueChange={onSelectionChange} />
+          <Checkbox aria-label={`Выбрать: ${title}`} onChange={onSelectionChange}>
+            <Checkbox.Control>
+              <Checkbox.Indicator />
+            </Checkbox.Control>
+          </Checkbox>
         </AnimatedPresenceFacade>
       </motion.div>
     </div>

@@ -2,7 +2,7 @@
 
 import { Genre, useMoviesListQuery, useSearchQuery } from '@/api';
 import { useIsScrolledToBottom } from '@/hooks/isScrolledToBottom';
-import { Button, Input, Spinner } from '@heroui/react';
+import { Button, Input, Spinner, TextField, Label } from '@heroui/react';
 import { useTranslations } from 'next-intl';
 import React, { useEffect } from 'react';
 import {
@@ -120,28 +120,27 @@ const ExplorePage = ({ moviesGenresList, tvShowsGenresList }: Props) => {
       <div className="telegram-theme-surface -mx-4 px-4 py-4 sticky top-0 z-10">
         <form onSubmit={rhfHandleSubmit(handleSubmit)}>
           <div className="grid grid-cols-6 gap-4">
-            <Input
-              size="sm"
-              className="col-span-4"
-              label={t('searchPlaceholder')}
-              autoComplete="off"
-              radius="lg"
-              isDisabled={Boolean(searchTerm)}
-              {...register('searchInput', {
-                onChange: (event) => setSearchDraft(event.target.value),
-              })}
-            />
+            <TextField className="col-span-4" isDisabled={Boolean(searchTerm)}>
+              <Label className="sr-only">{t('searchPlaceholder')}</Label>
+              <Input
+                placeholder={t('searchPlaceholder')}
+                autoComplete="off"
+                {...register('searchInput', {
+                  onChange: (event) => setSearchDraft(event.target.value),
+                })}
+              />
+            </TextField>
             {Boolean(searchTerm) ? (
               <Button
                 className="col-span-2"
-                variant="solid"
+                variant="secondary"
                 onPress={handleResetSearchFormButtonClick}
                 size="lg"
               >
                 {t('clearSearchButtonCaption')}
               </Button>
             ) : (
-              <Button className="col-span-2" variant="solid" type="submit" size="lg">
+              <Button className="col-span-2" variant="primary" type="submit" size="lg">
                 {t('searchButtonCaption')}
               </Button>
             )}

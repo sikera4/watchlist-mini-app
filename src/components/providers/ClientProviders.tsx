@@ -1,6 +1,6 @@
 'use client';
 
-import { HeroUIProvider, ToastProvider } from '@heroui/react';
+import { Toast } from '@heroui/react';
 import { ReactNode } from 'react';
 import TelegramAppProvider from './TelegramAppProvider';
 import ThemeProvider from './ThemeProvider';
@@ -12,14 +12,12 @@ type Props = {
 
 const ClientProviders = ({ children }: Props) => {
   return (
-    <HeroUIProvider>
-      <TelegramAppProvider>
-        <BrowsingStateProvider>
-          <ThemeProvider>{children}</ThemeProvider>
-        </BrowsingStateProvider>
-        <ToastProvider placement="top-center" />
-      </TelegramAppProvider>
-    </HeroUIProvider>
+    <TelegramAppProvider>
+      <BrowsingStateProvider>
+        <ThemeProvider>{children}</ThemeProvider>
+      </BrowsingStateProvider>
+      <Toast.Provider placement="top" />
+    </TelegramAppProvider>
   );
 };
 
