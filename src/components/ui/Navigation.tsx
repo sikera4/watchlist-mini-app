@@ -13,11 +13,14 @@ const navItems = [
 function PendingIndicator() {
   const { pending } = useLinkStatus();
 
-  return pending ? (
-    <span role="status" className="size-2 animate-pulse rounded-full bg-current">
-      <span className="sr-only">Открываем страницу…</span>
+  return (
+    <span
+      role="status"
+      className={`pointer-events-none absolute bottom-1 left-1/2 size-1 -translate-x-1/2 rounded-full bg-current ${pending ? 'opacity-100 transition-opacity delay-150 duration-150 motion-reduce:transition-none' : 'opacity-0'}`}
+    >
+      <span className="sr-only">{pending ? 'Открываем страницу…' : ''}</span>
     </span>
-  ) : null;
+  );
 }
 
 const Navigation = () => {
@@ -39,7 +42,7 @@ const Navigation = () => {
             scroll={false}
             aria-current={pathname === route ? 'page' : undefined}
             onNavigate={() => registerHapticFeedback('soft')}
-            className={`flex min-h-11 items-center justify-center gap-2 rounded-full px-5 text-sm font-medium transition-colors focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent ${pathname === route ? 'bg-accent text-accent-foreground' : 'text-muted hover:bg-surface-secondary'}`}
+            className={`relative flex min-h-11 items-center justify-center gap-2 rounded-full px-5 text-sm font-medium transition-colors motion-reduce:transition-none focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent ${pathname === route ? 'bg-accent text-accent-foreground' : 'text-muted hover:bg-surface-secondary'}`}
           >
             <Icon aria-hidden="true" />
             {label}

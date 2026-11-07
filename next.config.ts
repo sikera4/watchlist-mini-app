@@ -8,7 +8,6 @@ const nextConfig: NextConfig = {
 
   experimental: {
     optimizePackageImports: ['@heroui/react'],
-    viewTransition: true,
   },
 
   rewrites: async () => {
