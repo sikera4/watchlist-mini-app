@@ -13,7 +13,7 @@ const ExplorePageSkeleton = () => {
   );
 
   return (
-    <div className="p-4 relative min-h-screen">
+    <div className="telegram-theme-surface p-4 relative min-h-screen">
       <div className="grid grid-cols-6 gap-4">
         <Skeleton className="h-12 rounded-lg col-span-4" />
         <Skeleton className="h-12 rounded-lg col-span-2" />
