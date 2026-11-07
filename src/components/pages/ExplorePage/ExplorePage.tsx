@@ -106,8 +106,8 @@ const ExplorePage = ({ moviesGenresList, tvShowsGenresList }: Props) => {
   };
 
   return (
-    <div className="px-4 pb-4 relative min-h-screen">
-      <div className="bg-background py-4 sticky top-0 z-10">
+    <div className="telegram-theme-surface px-4 pb-4 relative min-h-screen">
+      <div className="telegram-theme-surface -mx-4 px-4 py-4 sticky top-0 z-10">
         <form onSubmit={rhfHandleSubmit(handleSubmit)}>
           <div className="grid grid-cols-6 gap-4">
             <Input
