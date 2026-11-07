@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import Link from 'next/link';
 import { Accordion, Button } from '@heroui/react';
-import { FaArrowRight, FaUsers } from 'react-icons/fa6';
+import { FaArrowRight, FaTrashCan, FaUsers } from 'react-icons/fa6';
 import type { List } from '@/api/types';
 import CollectionCover from './CollectionCover';
 import DeleteItemsDialog from './DeleteItemsDialog';
@@ -108,23 +108,37 @@ export default function CollectionCard({ watchlist }: { watchlist: List }) {
                 ))}
               </div>
 
+              {filter === 'seen' && !isEditing && visibleItems.length > 0 && (
+                <p className="mb-3 text-xs leading-relaxed text-muted">
+                  Нажмите на галочку, чтобы вернуть фильм или сериал в очередь.
+                </p>
+              )}
+
               <div className="mb-1 flex items-center justify-between gap-2">
                 <span className="text-xs text-muted">
                   {isEditing
-                    ? `Выбрано: ${selection.length}`
+                    ? `К удалению: ${selectedItems.length}`
                     : `В подборке: ${visibleItems.length}`}
                 </span>
                 <Button
-                  variant="ghost"
+                  variant={isEditing ? 'secondary' : 'danger-soft'}
                   size="sm"
                   onPress={() => {
                     setIsEditing((current) => !current);
                     setSelection([]);
                   }}
                 >
-                  {isEditing ? 'Готово' : 'Выбрать'}
+                  {!isEditing && <FaTrashCan aria-hidden="true" className="size-3" />}
+                  {isEditing ? 'Отменить выбор' : 'Удалить элементы'}
                 </Button>
               </div>
+
+              {isEditing && (
+                <p className="mb-3 rounded-xl border border-danger/20 bg-danger/5 p-3 text-xs leading-relaxed text-foreground">
+                  Отметьте фильмы и сериалы, которые хотите удалить из этого списка. Ничего не
+                  удалится без подтверждения.
+                </p>
+              )}
             </>
           )}
 
@@ -158,7 +172,7 @@ export default function CollectionCard({ watchlist }: { watchlist: List }) {
             </div>
           )}
 
-          {isEditing && selection.length > 0 && (
+          {isEditing && (
             <DeleteItemsDialog
               watchlistId={watchlist.id}
               items={selectedItems}

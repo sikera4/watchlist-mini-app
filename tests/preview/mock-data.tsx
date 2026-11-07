@@ -66,9 +66,9 @@ export function useWatchlists() {
   return { watchlists, isLoading: false, isError: false, refetch: () => {} };
 }
 
-type Callbacks = { onSuccess?: () => unknown };
+type Callbacks<T = unknown> = { onSuccess?: (data: undefined, variables: T) => unknown };
 
-function useSampleMutation<T>(apply: (params: T) => void, options?: Callbacks) {
+function useSampleMutation<T>(apply: (params: T) => void, options?: Callbacks<T>) {
   const [isPending, setPending] = useState(false);
 
   return {
@@ -78,7 +78,7 @@ function useSampleMutation<T>(apply: (params: T) => void, options?: Callbacks) {
       setTimeout(() => {
         apply(params);
         setPending(false);
-        options?.onSuccess?.();
+        options?.onSuccess?.(undefined, params);
       }, 200);
     },
   };
@@ -94,20 +94,20 @@ export function useCreateListMutation(options?: Callbacks) {
   );
 }
 
-export function useMarkAsSeenMutation(options?: Callbacks) {
+type WatchedParams = { watchlistId: string; mediaId: number; isSeen: boolean };
+
+export function useSetWatchedMutation(options?: Callbacks<WatchedParams>) {
   const [, setLists] = useData();
 
   return useSampleMutation(
-    ({ watchlistId, movieId }: { watchlistId: string; movieId: number }) =>
+    ({ watchlistId, mediaId, isSeen }: WatchedParams) =>
       setLists((lists) =>
         lists.map((list) =>
           list.id !== watchlistId
             ? list
             : {
                 ...list,
-                items: list.items.map((item) =>
-                  item.id === movieId ? { ...item, isSeen: true } : item
-                ),
+                items: list.items.map((item) => (item.id === mediaId ? { ...item, isSeen } : item)),
               }
         )
       ),
