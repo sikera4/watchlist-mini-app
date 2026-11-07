@@ -6,7 +6,6 @@ import { NextIntlClientProvider } from 'next-intl';
 import { Noto_Sans_Display } from 'next/font/google';
 import Script from 'next/script';
 import './globals.css';
-import { ViewTransition } from 'react';
 
 const TELEGRAM_THEME_BOOTSTRAP = `
   (() => {
@@ -105,7 +104,7 @@ export default async function RootLayout({
         <ReactQueryProvider>
           <NextIntlClientProvider>
             <Providers>
-              <ViewTransition name="page-content">{children}</ViewTransition>
+              {children}
               <Navigation />
             </Providers>
           </NextIntlClientProvider>

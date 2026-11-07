@@ -62,10 +62,12 @@ export default function ListItem({
           aria-label={`Выбрать: ${title}`}
           isSelected={isSelected}
           onChange={onSelectionChange}
-          className="shrink-0 p-3"
+          className="shrink-0"
         >
-          <Checkbox.Content aria-label={`Выбрать: ${title}`}>
-            <Checkbox.Control>
+          <Checkbox.Content aria-label={`Выбрать: ${title}`} className="p-3">
+            <Checkbox.Control
+              className={`size-5 border-2 ${isSelected ? 'border-accent' : 'border-muted'}`}
+            >
               <Checkbox.Indicator />
             </Checkbox.Control>
           </Checkbox.Content>

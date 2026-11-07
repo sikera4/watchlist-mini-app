@@ -48,7 +48,17 @@ it('requires confirmation before removing selected media', async () => {
   showLists();
   fireEvent.click(screen.getByRole('button', { name: /На выходные/ }));
   fireEvent.click(await screen.findByRole('button', { name: 'Выбрать' }));
+  const control = screen
+    .getByRole('checkbox', { name: 'Выбрать: Дюна' })
+    .closest('[data-slot="checkbox"]')
+    ?.querySelector('[data-slot="checkbox-control"]');
+
+  expect(control?.classList.contains('border-2')).toBe(true);
+  expect(control?.classList.contains('border-muted')).toBe(true);
+
   fireEvent.click(screen.getByRole('checkbox', { name: 'Выбрать: Дюна' }));
+  expect(control?.classList.contains('border-accent')).toBe(true);
+
   fireEvent.click(screen.getByRole('button', { name: 'Удалить выбранное (1)' }));
   expect(await screen.findByRole('dialog')).toBeTruthy();
   fireEvent.click(screen.getByRole('button', { name: 'Отмена' }));

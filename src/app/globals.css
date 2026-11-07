@@ -12,53 +12,10 @@ body {
   color: var(--tg-theme-text-color, var(--foreground));
 }
 
-@keyframes slide-in-down {
-  from {
-    transform: translateY(24px);
-    opacity: 0;
-  }
-  to {
-    transform: translateY(0);
-    opacity: 1;
-  }
-}
-
-@keyframes slide-out-up {
-  from {
-    transform: translateY(0);
-    opacity: 1;
-  }
-  to {
-    transform: translateY(-24px);
-    opacity: 0;
-  }
-}
-
-::view-transition-group(page-content) {
-  animation-duration: 180ms;
-  animation-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
-}
-
-::view-transition-old(page-content) {
-  animation-name: slide-out-up;
-}
-
-::view-transition-new(page-content) {
-  animation-name: slide-in-down;
-}
-
 .app-navigation {
   padding-bottom: max(1rem, env(safe-area-inset-bottom));
 }
 
 .app-page {
   padding-bottom: calc(6rem + env(safe-area-inset-bottom));
-}
-
-@media (prefers-reduced-motion: reduce) {
-  ::view-transition-group(page-content),
-  ::view-transition-old(page-content),
-  ::view-transition-new(page-content) {
-    animation: none;
-  }
 }
