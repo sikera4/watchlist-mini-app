@@ -1,6 +1,6 @@
 import { db } from '@/utilities/initializeFirebase';
 import { useMutation, UseMutationOptions, useQueryClient } from '@tanstack/react-query';
-import { addDoc, arrayUnion, collection, doc, updateDoc } from 'firebase/firestore';
+import { createWatchlist } from '../firestore/watchlists';
 import { getUserDataQueryKey } from './useUserDataQuery';
 import { getWatchlistsQueryKey } from './useWatchlistsQuery';
 
@@ -10,20 +10,7 @@ type Params = {
 };
 
 const createList = async (params: Params) => {
-  const watchlistsCollectionRef = collection(db, 'watchlists');
-  const watchlistDocRef = await addDoc(watchlistsCollectionRef, {
-    name: params.name ?? 'New Watchlist',
-    userIds: [params.userId],
-    items: [],
-  });
-
-  const watchlistId = watchlistDocRef.id;
-
-  const userDocRef = doc(db, 'users', String(params.userId));
-
-  await updateDoc(userDocRef, {
-    watchlists: arrayUnion(watchlistId),
-  });
+  await createWatchlist(db, params.userId, params.name);
 };
 
 export const useCreateListMutation = (options?: UseMutationOptions<unknown, unknown, Params>) => {

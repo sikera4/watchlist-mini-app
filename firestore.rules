@@ -1,0 +1,63 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    function signedIn() {
+      return request.auth != null;
+    }
+
+    function isMember() {
+      return signedIn() && request.auth.uid in resource.data.userIds;
+    }
+
+    match /users/{userId} {
+      // Admin SDK provisioning bypasses these client rules.
+      allow get: if signedIn() && request.auth.uid == userId;
+
+      function addsNewList() {
+        let before = resource.data.watchlists;
+        let after = request.resource.data.watchlists;
+        let added = after.removeAll(before);
+        return before is list && after is list
+          && after.size() == before.size() + 1
+          && after.toSet().size() == after.size()
+          && after.hasAll(before)
+          && added.size() == 1
+          && added[0] is string && added[0].matches('^[^/]+$')
+          // References can only be appended with creation of a new, owned list.
+          && !exists(/databases/$(database)/documents/watchlists/$(added[0]))
+          && getAfter(/databases/$(database)/documents/watchlists/$(added[0])).data.userIds
+            == [request.auth.uid];
+      }
+
+      allow update: if signedIn() && request.auth.uid == userId
+        && request.resource.data.userId == userId
+        && request.resource.data.diff(resource.data).affectedKeys().hasOnly(['watchlists'])
+        && addsNewList();
+    }
+
+    match /watchlists/{watchlistId} {
+      allow get, list: if isMember();
+
+      allow create: if signedIn()
+        && request.resource.data.keys().hasAll(['name', 'userIds', 'items'])
+        && request.resource.data.keys().hasOnly(['name', 'userIds', 'items'])
+        && request.resource.data.name is string
+        && request.resource.data.name.size() > 0
+        && request.resource.data.name.size() <= 100
+        && request.resource.data.userIds == [request.auth.uid]
+        && request.resource.data.items == []
+        // Require the user's reference update in the same atomic batch.
+        && !(watchlistId in get(/databases/$(database)/documents/users/$(request.auth.uid)).data.watchlists)
+        && watchlistId in getAfter(/databases/$(database)/documents/users/$(request.auth.uid)).data.watchlists;
+
+      allow update: if isMember()
+        && request.resource.data.diff(resource.data).affectedKeys().hasOnly(['items'])
+        && request.resource.data.items is list;
+    }
+
+    // Includes deletes, client user creation, user listing, and subcollections.
+    match /{document=**} {
+      allow read, write: if false;
+    }
+  }
+}
