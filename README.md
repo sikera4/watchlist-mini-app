@@ -15,6 +15,10 @@ There is no second login screen. The app intentionally refuses to load outside T
 
 Copy `.env.example` to `.env.local` and configure the Telegram bot and Firebase Admin credentials before starting the app. Do not expose `TELEGRAM_BOT_TOKEN` or Firebase Admin credentials through `NEXT_PUBLIC_*` variables.
 
+## Firestore security
+
+See [the rollout guide](docs/firestore-security.md) for the read-only membership audit, emulator tests, access policy, and deployment order. Production rules are deployed separately from the app, after data review and testing.
+
 ## Getting Started
 
 First, run the development server:

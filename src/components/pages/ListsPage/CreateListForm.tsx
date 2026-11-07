@@ -50,7 +50,13 @@ const CreateCollectionForm = ({ className }: Props) => {
       {isFormMode ? (
         <form onSubmit={rhfHandleSubmit(handleSubmit)}>
           <div className="flex flex-col gap-2">
-            <Input label="List name" {...register('name')} />
+            <Input
+              label="List name"
+              isRequired
+              minLength={1}
+              maxLength={100}
+              {...register('name')}
+            />
             <div className="grid grid-cols-2 gap-2">
               <Button type="submit" isLoading={createListMutation.isPending}>
                 Добавить
