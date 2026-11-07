@@ -106,6 +106,17 @@ pnpm exec firebase deploy --only firestore:rules --project watchlist-1f961
 
 No default production project or automatic deployment is configured. Merging the branch does not deploy rules. This command changes access policy, not stored documents.
 
+### Production rollout checkpoint: 2026-11-07
+
+- Application commit `ec1a729` was built with the production target and deployed to `watchlist-mini-app.vercel.app` as Vercel deployment `dpl_BshH7z4xWg7HZrzccrEScbMhL4A4`. This deployed the feature branch without merging `main`; merge the branch before subsequent production releases so the compatible client changes are retained.
+- Both `/` and `/explore` returned HTTP 200, and `/api/auth/telegram` rejected invalid initialization data with HTTP 401. These smoke checks do not substitute for an authenticated Telegram session.
+- A fresh production audit returned 180 users, 19 watchlists, and zero findings immediately before release.
+- Published ruleset `86ca90f1-a10b-4102-8d02-495fc3dbe421` at 17:53 UTC using the Firebase Admin Security Rules API and the existing service-account credentials. The release was guarded by checking the previous rules against the private backup, then read back and verified byte-for-byte against `firestore.rules`.
+- Anonymous reads of `users`, `watchlists`, and `watchlistInvites` each returned HTTP 403 with `PERMISSION_DENIED` after release.
+- Local verification passed all 27 tests, TypeScript checks, and the production build. Lint has no errors and three pre-existing warnings.
+
+Do not roll back to the old application without considering its incompatible two-write list creation flow. Test the full private/shared-list workflow through Telegram after reopening the Mini App.
+
 ## 5. Verify in Telegram
 
 Use two accounts and verify private and shared lists load correctly, new list creation works, and members can add/remove/mark items. Emulator tests additionally verify that strangers cannot read a list, mutate membership, create another user's profile, or write unknown collections.
