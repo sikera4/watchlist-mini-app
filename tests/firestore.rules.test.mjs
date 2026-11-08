@@ -22,6 +22,7 @@ import {
   writeBatch,
 } from 'firebase/firestore';
 import { createWatchlist, readWatchlists } from '../src/api/firestore/watchlists.ts';
+import { setWatched } from '../src/api/firestore/watched.ts';
 
 // Never allow these tests (which clear their database) to target a live project.
 const projectId = 'demo-watchlist-rules';
@@ -194,13 +195,15 @@ test('creation requires an existing server-provisioned user and cannot impersona
   await assertFails(createWatchlist(asUser(alice), bob));
 });
 
-test('members can add, mark seen, and remove items in own or shared lists', async () => {
+test('members can add, mark seen, unmark, and remove items in own or shared lists', async () => {
   for (const id of ['alice-list', 'shared']) {
     const ref = doc(asUser(alice), 'watchlists', id);
     await assertSucceeds(updateDoc(ref, { items: arrayUnion(item) }));
     const seen = { ...item, isSeen: true };
     await assertSucceeds(updateDoc(ref, { items: [seen] }));
-    await assertSucceeds(updateDoc(ref, { items: arrayRemove(seen) }));
+    await assertSucceeds(updateDoc(ref, { items: [item] }));
+    assert.equal((await getDoc(ref)).data().items[0].isSeen, false);
+    await assertSucceeds(updateDoc(ref, { items: arrayRemove(item) }));
     assert.deepEqual((await getDoc(ref)).data().items, []);
   }
 
@@ -212,6 +215,52 @@ test('non-members cannot edit items or grant themselves membership', async () =>
   await assertFails(updateDoc(ref, { items: [item] }));
   await assertFails(updateDoc(ref, { userIds: arrayUnion(alice) }));
   await assertFails(updateDoc(ref, { userIds: [alice], items: [] }));
+});
+
+test('watched transaction supports both directions without reordering or changing other fields', async () => {
+  const db = asUser(alice);
+  const ref = doc(db, 'watchlists', 'shared');
+  const other = { ...item, id: 43, title: 'Other' };
+  await updateDoc(ref, { items: [item, other] });
+
+  for (const isSeen of [true, true, false]) {
+    await setWatched(db, { watchlistId: 'shared', mediaId: item.id, isSeen });
+    assert.deepEqual((await getDoc(ref)).data().items, [{ ...item, isSeen }, other]);
+  }
+
+  await assertFails(
+    setWatched(asUser('stranger'), { watchlistId: 'shared', mediaId: item.id, isSeen: false })
+  );
+});
+
+test('concurrent watched updates preserve changes to both items', async () => {
+  const db = asUser(alice);
+  const ref = doc(db, 'watchlists', 'shared');
+  const other = { ...item, id: 43 };
+  await updateDoc(ref, { items: [item, other] });
+
+  await Promise.all([
+    setWatched(db, { watchlistId: 'shared', mediaId: item.id, isSeen: true }),
+    setWatched(asUser(bob), { watchlistId: 'shared', mediaId: other.id, isSeen: true }),
+  ]);
+
+  assert.deepEqual((await getDoc(ref)).data().items, [
+    { ...item, isSeen: true },
+    { ...other, isSeen: true },
+  ]);
+});
+
+test('watched updates reject removed items without recreating them', async () => {
+  const db = asUser(alice);
+  const ref = doc(db, 'watchlists', 'shared');
+  await updateDoc(ref, { items: [] });
+
+  await assert.rejects(
+    setWatched(db, { watchlistId: 'shared', mediaId: item.id, isSeen: false }),
+    /Item no longer exists/
+  );
+  assert.deepEqual((await getDoc(ref)).data().items, []);
+  await assertFails(setWatched(db, { watchlistId: 'missing', mediaId: item.id, isSeen: false }));
 });
 
 test('members cannot change membership, rename lists, add fields, or delete lists', async () => {

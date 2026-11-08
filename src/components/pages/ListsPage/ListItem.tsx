@@ -1,4 +1,4 @@
-import { MediaItem, useMarkAsSeenMutation } from '@/api';
+import { MediaItem, useSetWatchedMutation } from '@/api';
 import { formatYear } from '@/utilities/formatYear';
 import { toast, Button, Checkbox, Spinner } from '@heroui/react';
 import { FaCheck, FaRegCircle } from 'react-icons/fa6';
@@ -21,15 +21,14 @@ export default function ListItem({
 }: Props) {
   const { title, releaseDate, posterPath, isSeen, id } = item;
 
-  const markAsSeenMutation = useMarkAsSeenMutation({
-    onSuccess: () => toast.success('Отмечено как просмотренное'),
-    onError: () => toast.danger('Не удалось отметить просмотренным'),
+  const watchedMutation = useSetWatchedMutation({
+    onSuccess: (_, { isSeen: nextIsSeen }) =>
+      toast.success(nextIsSeen ? 'Отмечено как просмотренное' : 'Возвращено в очередь'),
+    onError: () => toast.danger('Не удалось изменить статус. Попробуйте ещё раз.'),
   });
 
-  const handleMarkAsSeen = () => {
-    if (!isSeen) {
-      markAsSeenMutation.mutate({ movieId: id, watchlistId });
-    }
+  const toggleWatched = () => {
+    watchedMutation.mutate({ mediaId: id, watchlistId, isSeen: !isSeen });
   };
 
   return (
@@ -59,12 +58,12 @@ export default function ListItem({
 
       {isEditMode ? (
         <Checkbox
-          aria-label={`Выбрать: ${title}`}
+          aria-label={`Выбрать для удаления: ${title}`}
           isSelected={isSelected}
           onChange={onSelectionChange}
           className="shrink-0"
         >
-          <Checkbox.Content aria-label={`Выбрать: ${title}`} className="p-3">
+          <Checkbox.Content aria-label={`Выбрать для удаления: ${title}`} className="p-3">
             <Checkbox.Control
               className={`size-5 border-2 ${isSelected ? 'border-accent' : 'border-muted'}`}
             >
@@ -75,14 +74,13 @@ export default function ListItem({
       ) : (
         <Button
           isIconOnly
-          aria-label={isSeen ? `${title}: просмотрено` : `Отметить просмотренным: ${title}`}
+          aria-label={isSeen ? `Вернуть в очередь: ${title}` : `Отметить просмотренным: ${title}`}
           variant="ghost"
           className={`shrink-0 ${isSeen ? 'text-success' : 'text-muted'}`}
-          onPress={handleMarkAsSeen}
-          isPending={markAsSeenMutation.isPending}
-          isDisabled={isSeen}
+          onPress={toggleWatched}
+          isPending={watchedMutation.isPending}
         >
-          {markAsSeenMutation.isPending ? (
+          {watchedMutation.isPending ? (
             <Spinner size="sm" />
           ) : isSeen ? (
             <FaCheck />

@@ -5,7 +5,7 @@ export { useSearchQuery } from './hooks/useSearchQuery';
 export { useCreateListMutation } from './hooks/useCreateListMutation';
 export { useUserDataQuery } from './hooks/useUserDataQuery';
 export { useWatchlistsQuery, getWatchlistsQueryKey } from './hooks/useWatchlistsQuery';
-export { useMarkAsSeenMutation } from './hooks/useMarkAsSeenMutation';
+export { useSetWatchedMutation } from './hooks/useSetWatchedMutation';
 export { getMoviesGenresList } from './requests/getMoviesGenresList';
 export { getTvShowsGenresList } from './requests/getTvShowsGenresList';
 export type { Movie, MediaItem, TvShow, Genre, List } from './types';

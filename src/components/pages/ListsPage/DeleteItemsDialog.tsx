@@ -22,7 +22,12 @@ export default function DeleteItemsDialog({ watchlistId, items, onRemoved }: Pro
 
   return (
     <Modal>
-      <Button variant="danger-soft" className="mt-3 w-full" onPress={() => setIsOpen(true)}>
+      <Button
+        variant="danger-soft"
+        className="mt-3 w-full"
+        isDisabled={items.length === 0}
+        onPress={() => setIsOpen(true)}
+      >
         Удалить выбранное ({items.length})
       </Button>
 
@@ -39,6 +44,11 @@ export default function DeleteItemsDialog({ watchlistId, items, onRemoved }: Pro
             </Modal.Header>
             <Modal.Body>
               <p>Будет удалено: {items.length}. Это изменит список для всех его участников.</p>
+              <ul className="mt-3 max-h-40 list-disc space-y-1 overflow-y-auto pl-5 text-sm">
+                {items.map((item) => (
+                  <li key={item.id}>{item.title}</li>
+                ))}
+              </ul>
             </Modal.Body>
             <Modal.Footer>
               <Button
